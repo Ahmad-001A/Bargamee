@@ -1,22 +1,14 @@
-// Инициализация Telegram WebApp
-const tg = window.Telegram ? window.Telegram.WebApp : null;
+// ⚙️ НАСТРОЙКИ БОТА ДЛЯ ПРЯМОЙ ОТПРАВКИ ФОТО
+const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8"; // Например: "7123456789:AAE..."
+const ADMIN_ID = "7934934196";  // Например: "123456789"
 
-if (tg) {
-  try {
-    tg.ready();
-    tg.expand();
-  } catch (e) {
-    console.error("Telegram WebApp init error:", e);
-  }
-}
-
-// Официальные качественные постеры с надежных CDN
-const catalogData = [
+// ОФИЦИАЛЬНЫЕ ПОСТЕРЫ ИГР С ВЫСОКИМ РАЗРЕШЕНИЕМ
+const catalog = [
   {
     id: "pubg",
     name: "PUBG Mobile",
-    desc: "Пополнение UC по ID игрока",
-    banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+    desc: "Пополнение UC по ID",
+    banner: "https://images.hdqwalls.com/download/pubg-mobile-2020-4k-38-1080x1920.jpg",
     categories: [
       {
         title: "Пакеты UC",
@@ -30,7 +22,7 @@ const catalogData = [
         ]
       },
       {
-        title: "Подписки & Пропуск",
+        title: "Подписки",
         items: [
           { name: "Royale Pass", price: "56.95 смн." },
           { name: "Elite Pass Plus", price: "277.60 смн." },
@@ -44,7 +36,7 @@ const catalogData = [
     id: "freefire",
     name: "Free Fire",
     desc: "Алмазы и ваучеры",
-    banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+    banner: "https://freefiremobile-a.akamaihd.net/ffwebsite/images/wallpaper/img120.jpg",
     categories: [
       {
         title: "Алмазы",
@@ -68,8 +60,8 @@ const catalogData = [
   {
     id: "mlbb",
     name: "Mobile Legends",
-    desc: "Алмазы и пропуски",
-    banner: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=600&q=80",
+    desc: "Алмазы по ID",
+    banner: "https://mobilelegends.com/images/bg_main.jpg",
     categories: [
       {
         title: "Алмазы MLBB",
@@ -94,7 +86,7 @@ const catalogData = [
     id: "genshin",
     name: "Genshin Impact",
     desc: "Кристаллы и Луна",
-    banner: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80",
+    banner: "https://fastcdn.hoyoverse.com/content-v2/hk4e/101476/ef4e9ba7d1568e9e2b14460d37e2a9b3_8065476383637175239.jpg",
     servers: ["Европа", "Азия", "Америка", "TW/HK/MO"],
     categories: [
       {
@@ -104,8 +96,7 @@ const catalogData = [
           { name: "60 Кристаллов", price: "10.55 смн." },
           { name: "300+30 Кристаллов", price: "53.20 смн." },
           { name: "980+110 Кристаллов", price: "159.60 смн." },
-          { name: "1980+260 Кристаллов", price: "319.30 смн." },
-          { name: "3280+600 Кристаллов", price: "532.15 смн." }
+          { name: "1980+260 Кристаллов", price: "319.30 смн." }
         ]
       }
     ]
@@ -114,7 +105,7 @@ const catalogData = [
     id: "codm",
     name: "CoD Mobile",
     desc: "CP Пополнение",
-    banner: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
+    banner: "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchtown/store/mobile/codm-hero-mobile.jpg",
     regions: ["Казахстан / СНГ", "США", "Индия", "Европа"],
     categories: [
       {
@@ -123,8 +114,7 @@ const catalogData = [
           { name: "80 CP", price: "11.70 смн." },
           { name: "420 CP", price: "42.75 смн." },
           { name: "880 CP", price: "85.45 смн." },
-          { name: "2400 CP", price: "215.00 смн." },
-          { name: "5000 CP", price: "427.70 смн." }
+          { name: "2400 CP", price: "215.00 смн." }
         ]
       }
     ]
@@ -132,8 +122,8 @@ const catalogData = [
   {
     id: "roblox",
     name: "Roblox",
-    desc: "Robux кодами и пополнениями",
-    banner: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80",
+    desc: "Robux кодами",
+    banner: "https://images.rbxcdn.com/f25a811802202ed69e84606f7bfd0771.jpg",
     categories: [
       {
         title: "Пакеты Robux",
@@ -141,50 +131,36 @@ const catalogData = [
           { name: "100 Robux", price: "17.65 смн." },
           { name: "400 Robux", price: "55.00 смн." },
           { name: "800 Robux", price: "92.50 смн." },
-          { name: "2000 Robux", price: "217.95 смн." },
-          { name: "4500 Robux", price: "493.70 смн." }
+          { name: "2000 Robux", price: "217.95 смн." }
         ]
       }
     ]
   }
 ];
 
-let currentGame = null;
-let selectedItem = null;
-let selectedRegionServer = null;
-let currentPayment = 'Алиф Моби';
-let receiptFileName = '';
+let selectedGame = null;
+let selectedGoods = null;
+let selectedServerRegion = null;
+let selectedPayment = "Алиф Моби";
 
-function showError(text) {
-  const errBox = document.getElementById('error-box');
-  errBox.innerText = text;
-  errBox.style.display = 'block';
-  errBox.scrollIntoView({ behavior: 'smooth' });
-}
-
-function hideError() {
-  const errBox = document.getElementById('error-box');
-  errBox.style.display = 'none';
-  errBox.innerText = '';
-}
-
+// РЕНДЕР КАТАЛОГА
 function renderCatalog() {
-  const grid = document.getElementById('main-game-grid');
-  grid.innerHTML = '';
+  const grid = document.getElementById("game-grid");
+  grid.innerHTML = "";
 
-  catalogData.forEach(game => {
-    const card = document.createElement('div');
-    card.className = 'game-card';
+  catalog.forEach(game => {
+    const card = document.createElement("div");
+    card.className = "game-card";
     card.onclick = () => openGame(game);
 
     card.innerHTML = `
-      <img src="${game.banner}" class="game-banner-img" alt="${game.name}">
-      <div class="game-info">
+      <img src="${game.banner}" class="game-cover" alt="${game.name}">
+      <div class="game-details">
         <div>
-          <div class="game-title">${game.name}</div>
-          <div class="game-desc">${game.desc}</div>
+          <div class="game-name">${game.name}</div>
+          <div class="game-sub">${game.desc}</div>
         </div>
-        <div class="game-action">Купить →</div>
+        <div class="game-btn-text">Пополнить →</div>
       </div>
     `;
     grid.appendChild(card);
@@ -192,166 +168,190 @@ function renderCatalog() {
 }
 
 function openGame(game) {
-  currentGame = game;
+  selectedGame = game;
   resetForm();
 
-  document.getElementById('selected-game-title').innerText = game.name;
-  document.getElementById('selected-game-desc').innerText = game.desc;
-  document.getElementById('selected-game-banner').src = game.banner;
+  document.getElementById("order-game-title").innerText = game.name;
+  document.getElementById("order-game-desc").innerText = game.desc;
+  document.getElementById("order-game-img").src = game.banner;
 
-  const regionGroup = document.getElementById('region-selector-group');
-  const regionContainer = document.getElementById('region-buttons');
-  regionContainer.innerHTML = '';
+  // Регионы / Серверы
+  const regionGroup = document.getElementById("group-region");
+  const regionTags = document.getElementById("region-tags");
+  regionTags.innerHTML = "";
 
   const options = game.regions || game.servers;
   if (options && options.length > 0) {
-    regionGroup.style.display = 'block';
-    document.getElementById('region-label').innerText = game.regions ? 'Регион аккаунта:' : 'Сервер:';
+    regionGroup.style.display = "block";
+    document.getElementById("region-label").innerText = game.regions ? "Регион аккаунта:" : "Выберите сервер:";
     options.forEach((opt, idx) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
+      const btn = document.createElement("button");
+      btn.type = "button";
       btn.className = `tag-btn ${idx === 0 ? 'active' : ''}`;
       btn.innerText = opt;
       btn.onclick = () => {
         document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        selectedRegionServer = opt;
+        selectedServerRegion = opt;
       };
-      regionContainer.appendChild(btn);
+      regionTags.appendChild(btn);
     });
-    selectedRegionServer = options[0];
+    selectedServerRegion = options[0];
   } else {
-    regionGroup.style.display = 'none';
+    regionGroup.style.display = "none";
   }
 
-  const container = document.getElementById('goods-container');
-  container.innerHTML = '';
+  // Отрисовка товаров
+  const container = document.getElementById("goods-container");
+  container.innerHTML = "";
 
   game.categories.forEach(cat => {
-    const titleEl = document.createElement('div');
-    titleEl.className = 'category-title';
-    titleEl.innerText = cat.title;
-    container.appendChild(titleEl);
+    const catTitle = document.createElement("div");
+    catTitle.className = "cat-title";
+    catTitle.innerText = cat.title;
+    container.appendChild(catTitle);
 
-    const gridEl = document.createElement('div');
-    gridEl.className = 'goods-grid';
+    const grid = document.createElement("div");
+    grid.className = "goods-grid";
 
     cat.items.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'item-card';
-      card.onclick = () => selectItem(card, item);
+      const itemCard = document.createElement("div");
+      itemCard.className = "goods-card";
+      itemCard.onclick = () => {
+        document.querySelectorAll('.goods-card').forEach(c => c.classList.remove('selected'));
+        itemCard.classList.add('selected');
+        selectedGoods = item;
+        hideStatus();
+      };
 
-      card.innerHTML = `
-        ${item.bonus ? `<span class="item-badge">${item.bonus}</span>` : ''}
-        <span class="item-name">${item.name}</span>
-        <span class="item-price">${item.price}</span>
+      itemCard.innerHTML = `
+        ${item.bonus ? `<span class="badge">${item.bonus}</span>` : ''}
+        <span class="goods-name">${item.name}</span>
+        <span class="goods-price">${item.price}</span>
       `;
-      gridEl.appendChild(card);
+      grid.appendChild(itemCard);
     });
 
-    container.appendChild(gridEl);
+    container.appendChild(grid);
   });
 
-  document.getElementById('step-game').classList.remove('active');
-  document.getElementById('step-order').classList.add('active');
+  document.getElementById("screen-catalog").classList.remove("active");
+  document.getElementById("screen-order").classList.add("active");
   window.scrollTo(0, 0);
 }
 
-function selectItem(cardElement, item) {
-  document.querySelectorAll('.item-card').forEach(el => el.classList.remove('selected'));
-  cardElement.classList.add('selected');
-  selectedItem = item;
-  hideError();
+function showCatalog() {
+  resetForm();
+  document.getElementById("screen-order").classList.remove("active");
+  document.getElementById("screen-catalog").classList.add("active");
+  window.scrollTo(0, 0);
+}
+
+function selectPayment(method) {
+  selectedPayment = method;
+  document.getElementById("req-method-name").innerText = method;
+
+  document.getElementById("pay-alif").classList.toggle("active", method === "Алиф Моби");
+  document.getElementById("pay-dc").classList.toggle("active", method === "DC Bank");
+
+  document.getElementById("req-number").innerText = (method === "Алиф Моби") ? "+992931088151" : "+992009096449";
+}
+
+function copyRequisites() {
+  const num = document.getElementById("req-number").innerText;
+  navigator.clipboard.writeText(num);
+  alert("Скопировано: " + num);
+}
+
+function onFileSelected() {
+  const fileInput = document.getElementById("receipt-file");
+  if (fileInput.files && fileInput.files[0]) {
+    document.getElementById("file-text").innerText = "✅ Файл выбран: " + fileInput.files[0].name;
+    hideStatus();
+  }
 }
 
 function resetForm() {
-  selectedItem = null;
-  selectedRegionServer = null;
-  receiptFileName = '';
-  hideError();
-  document.getElementById('player-id').value = '';
-  document.getElementById('receipt-input').value = '';
-  document.getElementById('file-label-text').innerText = '📷 Выбрать фото чека';
-  document.getElementById('receipt-filename').innerText = '';
+  selectedGoods = null;
+  selectedServerRegion = null;
+  hideStatus();
+  document.getElementById("player-id").value = "";
+  document.getElementById("receipt-file").value = "";
+  document.getElementById("file-text").innerText = "Нажмите, чтобы выбрать фото из галереи";
 }
 
-function handleReceiptChange() {
-  const input = document.getElementById('receipt-input');
-  if (input.files && input.files[0]) {
-    receiptFileName = input.files[0].name;
-    document.getElementById('file-label-text').innerText = '✅ Чек выбран';
-    document.getElementById('receipt-filename').innerText = 'Файл: ' + receiptFileName;
-    hideError();
-  }
+function showStatus(text, type) {
+  const box = document.getElementById("status-message");
+  box.innerText = text;
+  box.className = `status-box ${type}`;
+  box.style.display = "block";
 }
 
-function goBack() {
-  resetForm();
-  document.getElementById('step-order').classList.remove('active');
-  document.getElementById('step-game').classList.add('active');
-  window.scrollTo(0, 0);
+function hideStatus() {
+  document.getElementById("status-message").style.display = "none";
 }
 
-function setPaymentMethod(method) {
-  currentPayment = method;
-  document.getElementById('pay-method-name').innerText = method;
+// 🚀 ОТПРАВКА НАСТОЯЩЕГО ФОТО ЧЕКА И ДАННЫХ АДМИНУ
+async function submitOrder() {
+  hideStatus();
 
-  document.getElementById('pay-alif').classList.toggle('active', method === 'Алиф Моби');
-  document.getElementById('pay-dc').classList.toggle('active', method === 'DC Bank');
+  const playerId = document.getElementById("player-id").value.trim();
+  const fileInput = document.getElementById("receipt-file");
 
-  const reqCard = document.getElementById('req-card');
-  reqCard.innerText = (method === 'Алиф Моби') ? '+992931088151' : '+992009096449';
-}
-
-function copyCard() {
-  const cardText = document.getElementById('req-card').innerText;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(cardText);
-    alert('Номер скопирован: ' + cardText);
-  } else {
-    alert('Скопируйте вручную: ' + cardText);
-  }
-}
-
-function sendOrder() {
-  hideError();
-
-  const playerId = document.getElementById('player-id').value.trim();
-
-  // Валидация
   if (!playerId) {
-    showError("⚠️ Заполните поле «Данные аккаунта (ID)»");
+    showStatus("⚠️ Введите ваш ID игрока!", "error");
     return;
   }
-  if (!selectedItem) {
-    showError("⚠️ Выберите нужный товар из списка выше!");
+  if (!selectedGoods) {
+    showStatus("⚠️ Выберите товар из списка!", "error");
     return;
   }
-  if (!receiptFileName) {
-    showError("⚠️ Прикрепите фото чека оплаты!");
+  if (!fileInput.files || !fileInput.files[0]) {
+    showStatus("⚠️ Выберите фото чека из галереи!", "error");
     return;
   }
 
-  const orderData = {
-    game: currentGame.name,
-    item: selectedItem.name,
-    price: selectedItem.price,
-    playerId: playerId,
-    regionOrServer: selectedRegionServer || 'Стандарт',
-    paymentMethod: currentPayment,
-    receiptFile: receiptFileName
-  };
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  btn.innerText = "Отправка заказа...";
 
-  if (!tg) {
-    showError("❌ Ошибка: Приложение открыто не через Telegram!");
-    return;
-  }
+  // Формируем текст под фото
+  const caption = 
+`🛒 *НОВЫЙ ЗАКАЗ В SNG GAME BAR!*
+
+🎮 *Игра:* ${selectedGame.name}
+🌐 *Регион/Сервер:* ${selectedServerRegion || 'Стандарт'}
+💎 *Товар:* ${selectedGoods.name}
+💵 *Цена:* ${selectedGoods.price}
+🆔 *ID Игрока:* \`${playerId}\`
+💳 *Оплата:* ${selectedPayment}`;
+
+  const formData = new FormData();
+  formData.append("chat_id", ADMIN_ID);
+  formData.append("photo", fileInput.files[0]);
+  formData.append("caption", caption);
+  formData.append("parse_mode", "Markdown");
 
   try {
-    // Отправка данных обратно в бот
-    tg.sendData(JSON.stringify(orderData));
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.ok) {
+      showStatus("✅ Ваш заказ и фото чека успешно отправлены администратору! Ожидайте зачисления.", "success");
+      btn.innerText = "Заказ отправлен!";
+    } else {
+      showStatus("❌ Ошибка отправки Telegram API: " + result.description, "error");
+      btn.disabled = false;
+      btn.innerText = "Попробовать снова";
+    }
   } catch (err) {
-    showError("❌ Ошибка отправки: " + err.message + "\nУбедитесь, что открыли магазин через нижнюю кнопку клавиатуры бота!");
+    showStatus("❌ Ошибка соединения: " + err.message, "error");
+    btn.disabled = false;
+    btn.innerText = "Попробовать снова";
   }
 }
 

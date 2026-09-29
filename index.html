@@ -2,88 +2,97 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SNG GAME BAR</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app-wrapper">
-    <header class="header">
-      <div class="logo">SNG GAME BAR</div>
-      <div class="subtitle">Пополнение игр & сервисов</div>
+  <div id="app">
+    <!-- Шапка -->
+    <header class="app-header">
+      <div class="logo-badge">SNG GAME BAR</div>
+      <p class="subtitle">Пополнение игр & сервисов</p>
     </header>
 
-    <main class="container">
-      <!-- ЭКРАН 1: ВЫБОР ИГРЫ -->
-      <section id="step-game" class="screen active">
-        <div class="section-title">Каталог игр</div>
-        <div class="game-grid" id="main-game-grid"></div>
-      </section>
+    <!-- Экран 1: Каталог игр -->
+    <section id="screen-catalog" class="screen active">
+      <div class="section-label">Выберите игру</div>
+      <div class="game-grid" id="game-grid"></div>
+    </section>
 
-      <!-- ЭКРАН 2: ОФОРМЛЕНИЕ ЗАКАЗА -->
-      <section id="step-order" class="screen">
-        <button type="button" class="btn-back" onclick="goBack()">← Вернуться в каталог</button>
+    <!-- Экран 2: Оформление заказа -->
+    <section id="screen-order" class="screen">
+      <button type="button" class="btn-back" onclick="showCatalog()">← Назад в каталог</button>
 
-        <div class="game-header-banner">
-          <img id="selected-game-banner" src="" alt="Poster">
-          <div class="game-header-info">
-            <h2 id="selected-game-title">Игра</h2>
-            <p id="selected-game-desc">Описание</p>
+      <div class="game-banner-card">
+        <img id="order-game-img" src="" alt="Game Poster">
+        <div class="game-banner-info">
+          <h2 id="order-game-title">Название игры</h2>
+          <p id="order-game-desc">Описание</p>
+        </div>
+      </div>
+
+      <!-- Регион / Сервер -->
+      <div class="form-group" id="group-region" style="display: none;">
+        <label id="region-label" class="label">Выбор региона / сервера:</label>
+        <div id="region-tags" class="tags-container"></div>
+      </div>
+
+      <!-- Ввод ID -->
+      <div class="form-group">
+        <label class="label">Данные аккаунта (User ID / Ник):</label>
+        <input type="text" id="player-id" class="input-field" placeholder="Введите ваш ID игрока" autocomplete="off">
+      </div>
+
+      <!-- Выбор товара -->
+      <div class="form-group">
+        <label class="label">Выберите товар:</label>
+        <div id="goods-container"></div>
+      </div>
+
+      <!-- Способ оплаты -->
+      <div class="form-group">
+        <label class="label">Способ оплаты:</label>
+        <div class="payment-selector">
+          <button type="button" class="pay-card active" id="pay-alif" onclick="selectPayment('Алиф Моби')">
+            <span>Алиф Моби</span>
+          </button>
+          <button type="button" class="pay-card" id="pay-dc" onclick="selectPayment('DC Bank')">
+            <span>DC Bank</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Реквизиты -->
+      <div class="requisites-card">
+        <span class="req-title">Переведите сумму на <strong id="req-method-name">Алиф Моби</strong>:</span>
+        <div class="req-number-row">
+          <span id="req-number">+992931088151</span>
+          <button type="button" class="btn-copy" onclick="copyRequisites()">Копировать</button>
+        </div>
+      </div>
+
+      <!-- Загрузка фото чека -->
+      <div class="form-group">
+        <label class="label">Прикрепите скриншот чека:</label>
+        <label for="receipt-file" class="file-dropzone" id="file-dropzone">
+          <div class="dropzone-content">
+            <span class="dropzone-icon">📷</span>
+            <span id="file-text">Нажмите, чтобы выбрать фото из галереи</span>
           </div>
-        </div>
+        </label>
+        <input type="file" id="receipt-file" accept="image/*" onchange="onFileSelected()">
+      </div>
 
-        <!-- ВЫБОР РЕГИОНА / СЕРВЕРА -->
-        <div class="form-group" id="region-selector-group" style="display: none;">
-          <label id="region-label" class="input-label">Регион / Сервер:</label>
-          <div id="region-buttons" class="tags-grid"></div>
-        </div>
+      <!-- Сообщение об ошибке/статусе -->
+      <div id="status-message" class="status-box" style="display: none;"></div>
 
-        <!-- ВВОД ID -->
-        <div class="form-group">
-          <label class="input-label">Данные аккаунта (User ID / Ник):</label>
-          <input type="text" id="player-id" placeholder="Введите ваш ID игрока" autocomplete="off" inputmode="numeric">
-        </div>
-
-        <!-- КАТАЛОГ ТОВАРОВ -->
-        <div class="form-group">
-          <label class="input-label">Выберите товар:</label>
-          <div id="goods-container"></div>
-        </div>
-
-        <!-- ВЫБОР СПОСОБА ОПЛАТЫ -->
-        <div class="form-group">
-          <label class="input-label">Способ оплаты:</label>
-          <div class="payment-methods">
-            <button type="button" class="pay-btn active" id="pay-alif" onclick="setPaymentMethod('Алиф Моби')">Алиф Моби</button>
-            <button type="button" class="pay-btn" id="pay-dc" onclick="setPaymentMethod('DC Bank')">DC Bank</button>
-          </div>
-        </div>
-
-        <!-- РЕКВИЗИТЫ -->
-        <div class="requisites-box">
-          <div class="req-title">Переведите сумму на <span id="pay-method-name">Алиф Моби</span>:</div>
-          <div class="req-number" id="req-card">+992931088151</div>
-          <button type="button" class="btn-copy" onclick="copyCard()">Скопировать номер</button>
-        </div>
-
-        <!-- ЗАГРУЗКА ЧЕКА -->
-        <div class="form-group">
-          <label class="input-label">Прикрепите чек оплаты:</label>
-          <label for="receipt-input" class="file-upload-btn">
-            <span id="file-label-text">📷 Выбрать фото чека</span>
-          </label>
-          <input type="file" id="receipt-input" accept="image/*" onchange="handleReceiptChange()">
-          <div id="receipt-filename" class="file-status"></div>
-        </div>
-
-        <!-- ОШИБКА НА ЭКРАНЕ -->
-        <div id="error-box" class="error-banner" style="display: none;"></div>
-
-        <!-- КНОПКА ОТПРАВКИ -->
-        <button type="button" class="btn-submit" id="submit-btn" onclick="sendOrder()">Подтвердить и отправить</button>
-      </section>
-    </main>
+      <!-- Кнопка отправки -->
+      <button type="button" class="btn-primary" id="btn-submit" onclick="submitOrder()">
+        Отправить чек и оформить
+      </button>
+    </section>
   </div>
 
   <script src="app.js"></script>

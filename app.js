@@ -1,13 +1,13 @@
 // ⚙️ НАСТРОЙКИ БОТА И МАССИВ АДМИНИСТРАТОРОВ
 const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8"; 
 
-// 🎯 Укажите список Telegram ID всех админов через запятую
+// 🎯 Укажите Telegram ID обоих админов (без символов # !)
 const ADMIN_IDS = [
-  "7934934196", // Telegram ID Первого админа
-  "6940892940"  # Telegram ID Второго админа
+  "7934934196", // Telegram ID первого админа
+  "6940892940"  // Telegram ID второго админа
 ];
 
-// 🎮 КАТАЛОГ С НАДЕЖНЫМИ ИЗОБРАЖЕНИЯМИ
+// 🎮 КАТАЛОГ ИГР (Используем надежные прямые обложки)
 const catalog = [
   {
     id: "pubg",
@@ -152,9 +152,10 @@ let selectedGoods = null;
 let selectedServerRegion = null;
 let selectedPayment = "Алиф Моби";
 
-// 🎮 ОТРИСОВКА КАТАЛОГА С ЗАЩИТОЙ ИЗОБРАЖЕНИЙ
+// 🎮 ОТРИСОВКА КАТАЛОГА
 function renderCatalog() {
   const grid = document.getElementById("game-grid");
+  if (!grid) return;
   grid.innerHTML = "";
 
   catalog.forEach(game => {
@@ -196,7 +197,6 @@ function openGame(game) {
     this.src = `https://via.placeholder.com/150/121826/00f0ff?text=${encodeURIComponent(game.name)}`;
   };
 
-  // Выбор региона / сервера
   const regionGroup = document.getElementById("group-region");
   const regionTags = document.getElementById("region-tags");
   regionTags.innerHTML = "";
@@ -222,7 +222,6 @@ function openGame(game) {
     regionGroup.style.display = "none";
   }
 
-  // Отрисовка товаров
   const container = document.getElementById("goods-container");
   container.innerHTML = "";
 
@@ -336,7 +335,6 @@ async function submitOrder() {
   btn.disabled = true;
   btn.innerText = "ОТПРАВКА ЗАКАЗА...";
 
-  // Данные покупателя из Telegram Mini App (если доступны)
   const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
   const usernameText = tgUser?.username ? `@${tgUser.username}` : (tgUser?.first_name || "Неизвестный");
 
@@ -354,7 +352,6 @@ async function submitOrder() {
   let successCount = 0;
   let errors = [];
 
-  // Цикл рассылки каждому админу
   for (const adminId of ADMIN_IDS) {
     const formData = new FormData();
     formData.append("chat_id", adminId);
@@ -389,4 +386,5 @@ async function submitOrder() {
   }
 }
 
-renderCatalog();
+// Запуск отрисовки после полной загрузки страницы
+document.addEventListener("DOMContentLoaded", renderCatalog);

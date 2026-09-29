@@ -1,14 +1,20 @@
-// ⚙️ НАСТРОЙКИ БОТА ДЛЯ ПРЯМОЙ ОТПРАВКИ ФОТО
-const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8"; // Например: "7123456789:AAE..."
-const ADMIN_ID = "7934934196";  // Например: "123456789"
+// ⚙️ НАСТРОЙКИ БОТА И МАССИВ АДМИНИСТРАТОРОВ
+const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8"; 
 
-// ОФИЦИАЛЬНЫЕ ПОСТЕРЫ ИГР С ВЫСОКИМ РАЗРЕШЕНИЕМ
+// 🎯 Укажите список Telegram ID всех админов через запятую
+const ADMIN_IDS = [
+  "7934934196", // Telegram ID Первого админа
+  "6940892940"  # Telegram ID Второго админа
+];
+
+// 🎮 КАТАЛОГ С НАДЕЖНЫМИ ИЗОБРАЖЕНИЯМИ
 const catalog = [
   {
     id: "pubg",
     name: "PUBG Mobile",
     desc: "Пополнение UC по ID",
-    banner: "https://images.hdqwalls.com/download/pubg-mobile-2020-4k-38-1080x1920.jpg",
+    badge: "HOT",
+    banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
     categories: [
       {
         title: "Пакеты UC",
@@ -36,7 +42,8 @@ const catalog = [
     id: "freefire",
     name: "Free Fire",
     desc: "Алмазы и ваучеры",
-    banner: "https://freefiremobile-a.akamaihd.net/ffwebsite/images/wallpaper/img120.jpg",
+    badge: "POPULAR",
+    banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
     categories: [
       {
         title: "Алмазы",
@@ -61,7 +68,8 @@ const catalog = [
     id: "mlbb",
     name: "Mobile Legends",
     desc: "Алмазы по ID",
-    banner: "https://mobilelegends.com/images/bg_main.jpg",
+    badge: "TOP",
+    banner: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
     categories: [
       {
         title: "Алмазы MLBB",
@@ -86,7 +94,7 @@ const catalog = [
     id: "genshin",
     name: "Genshin Impact",
     desc: "Кристаллы и Луна",
-    banner: "https://fastcdn.hoyoverse.com/content-v2/hk4e/101476/ef4e9ba7d1568e9e2b14460d37e2a9b3_8065476383637175239.jpg",
+    banner: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80",
     servers: ["Европа", "Азия", "Америка", "TW/HK/MO"],
     categories: [
       {
@@ -105,7 +113,8 @@ const catalog = [
     id: "codm",
     name: "CoD Mobile",
     desc: "CP Пополнение",
-    banner: "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchtown/store/mobile/codm-hero-mobile.jpg",
+    badge: "SALE",
+    banner: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80",
     regions: ["Казахстан / СНГ", "США", "Индия", "Европа"],
     categories: [
       {
@@ -123,7 +132,7 @@ const catalog = [
     id: "roblox",
     name: "Roblox",
     desc: "Robux кодами",
-    banner: "https://images.rbxcdn.com/f25a811802202ed69e84606f7bfd0771.jpg",
+    banner: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80",
     categories: [
       {
         title: "Пакеты Robux",
@@ -143,7 +152,7 @@ let selectedGoods = null;
 let selectedServerRegion = null;
 let selectedPayment = "Алиф Моби";
 
-// РЕНДЕР КАТАЛОГА
+// 🎮 ОТРИСОВКА КАТАЛОГА С ЗАЩИТОЙ ИЗОБРАЖЕНИЙ
 function renderCatalog() {
   const grid = document.getElementById("game-grid");
   grid.innerHTML = "";
@@ -154,13 +163,20 @@ function renderCatalog() {
     card.onclick = () => openGame(game);
 
     card.innerHTML = `
-      <img src="${game.banner}" class="game-cover" alt="${game.name}">
+      <div class="game-cover-wrap">
+        ${game.badge ? `<span class="game-badge">${game.badge}</span>` : ''}
+        <img src="${game.banner}" 
+             class="game-cover" 
+             alt="${game.name}" 
+             referrerpolicy="no-referrer"
+             onerror="this.onerror=null; this.src='https://via.placeholder.com/300x200/121826/00f0ff?text=${encodeURIComponent(game.name)}';">
+      </div>
       <div class="game-details">
         <div>
           <div class="game-name">${game.name}</div>
           <div class="game-sub">${game.desc}</div>
         </div>
-        <div class="game-btn-text">Пополнить →</div>
+        <div class="game-btn-text">ПОПОЛНИТЬ ▶</div>
       </div>
     `;
     grid.appendChild(card);
@@ -173,9 +189,14 @@ function openGame(game) {
 
   document.getElementById("order-game-title").innerText = game.name;
   document.getElementById("order-game-desc").innerText = game.desc;
-  document.getElementById("order-game-img").src = game.banner;
+  
+  const bannerImg = document.getElementById("order-game-img");
+  bannerImg.src = game.banner;
+  bannerImg.onerror = function() {
+    this.src = `https://via.placeholder.com/150/121826/00f0ff?text=${encodeURIComponent(game.name)}`;
+  };
 
-  // Регионы / Серверы
+  // Выбор региона / сервера
   const regionGroup = document.getElementById("group-region");
   const regionTags = document.getElementById("region-tags");
   regionTags.innerHTML = "";
@@ -183,7 +204,7 @@ function openGame(game) {
   const options = game.regions || game.servers;
   if (options && options.length > 0) {
     regionGroup.style.display = "block";
-    document.getElementById("region-label").innerText = game.regions ? "Регион аккаунта:" : "Выберите сервер:";
+    document.getElementById("region-label").innerText = game.regions ? "РЕГИОН АККАУНТА:" : "ВЫБЕРИТЕ СЕРВЕР:";
     options.forEach((opt, idx) => {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -266,7 +287,7 @@ function copyRequisites() {
 function onFileSelected() {
   const fileInput = document.getElementById("receipt-file");
   if (fileInput.files && fileInput.files[0]) {
-    document.getElementById("file-text").innerText = "✅ Файл выбран: " + fileInput.files[0].name;
+    document.getElementById("file-text").innerText = "✅ ФАЙЛ ВЫБРАН: " + fileInput.files[0].name;
     hideStatus();
   }
 }
@@ -277,7 +298,7 @@ function resetForm() {
   hideStatus();
   document.getElementById("player-id").value = "";
   document.getElementById("receipt-file").value = "";
-  document.getElementById("file-text").innerText = "Нажмите, чтобы выбрать фото из галереи";
+  document.getElementById("file-text").innerText = "НАЖМИТЕ, ЧТОБЫ ВЫБРАТЬ ЧЕК";
 }
 
 function showStatus(text, type) {
@@ -291,7 +312,7 @@ function hideStatus() {
   document.getElementById("status-message").style.display = "none";
 }
 
-// 🚀 ОТПРАВКА НАСТОЯЩЕГО ФОТО ЧЕКА И ДАННЫХ АДМИНУ
+// 🚀 ОТПРАВКА ДВУМ И БОЛЕЕ АДМИНИСТРАТОРАМ
 async function submitOrder() {
   hideStatus();
 
@@ -299,7 +320,7 @@ async function submitOrder() {
   const fileInput = document.getElementById("receipt-file");
 
   if (!playerId) {
-    showStatus("⚠️ Введите ваш ID игрока!", "error");
+    showStatus("⚠️️ Введите ваш ID игрока!", "error");
     return;
   }
   if (!selectedGoods) {
@@ -307,18 +328,22 @@ async function submitOrder() {
     return;
   }
   if (!fileInput.files || !fileInput.files[0]) {
-    showStatus("⚠️ Выберите фото чека из галереи!", "error");
+    showStatus("⚠️ Прикрепите скриншот чека!", "error");
     return;
   }
 
   const btn = document.getElementById("btn-submit");
   btn.disabled = true;
-  btn.innerText = "Отправка заказа...";
+  btn.innerText = "ОТПРАВКА ЗАКАЗА...";
 
-  // Формируем текст под фото
+  // Данные покупателя из Telegram Mini App (если доступны)
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  const usernameText = tgUser?.username ? `@${tgUser.username}` : (tgUser?.first_name || "Неизвестный");
+
   const caption = 
 `🛒 *НОВЫЙ ЗАКАЗ В SNG GAME BAR!*
 
+👤 *Покупатель:* ${usernameText}
 🎮 *Игра:* ${selectedGame.name}
 🌐 *Регион/Сервер:* ${selectedServerRegion || 'Стандарт'}
 💎 *Товар:* ${selectedGoods.name}
@@ -326,32 +351,41 @@ async function submitOrder() {
 🆔 *ID Игрока:* \`${playerId}\`
 💳 *Оплата:* ${selectedPayment}`;
 
-  const formData = new FormData();
-  formData.append("chat_id", ADMIN_ID);
-  formData.append("photo", fileInput.files[0]);
-  formData.append("caption", caption);
-  formData.append("parse_mode", "Markdown");
+  let successCount = 0;
+  let errors = [];
 
-  try {
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-      method: "POST",
-      body: formData
-    });
+  // Цикл рассылки каждому админу
+  for (const adminId of ADMIN_IDS) {
+    const formData = new FormData();
+    formData.append("chat_id", adminId);
+    formData.append("photo", fileInput.files[0]);
+    formData.append("caption", caption);
+    formData.append("parse_mode", "Markdown");
 
-    const result = await response.json();
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+        method: "POST",
+        body: formData
+      });
 
-    if (result.ok) {
-      showStatus("✅ Ваш заказ и фото чека успешно отправлены администратору! Ожидайте зачисления.", "success");
-      btn.innerText = "Заказ отправлен!";
-    } else {
-      showStatus("❌ Ошибка отправки Telegram API: " + result.description, "error");
-      btn.disabled = false;
-      btn.innerText = "Попробовать снова";
+      const result = await response.json();
+      if (result.ok) {
+        successCount++;
+      } else {
+        errors.push(`ID ${adminId}: ${result.description}`);
+      }
+    } catch (err) {
+      errors.push(`ID ${adminId}: ${err.message}`);
     }
-  } catch (err) {
-    showStatus("❌ Ошибка соединения: " + err.message, "error");
+  }
+
+  if (successCount > 0) {
+    showStatus("✅ Ваш заказ и чек успешно отправлены администраторам! Ожидайте зачисления.", "success");
+    btn.innerText = "ЗАКАЗ ОТПРАВЛЕН!";
+  } else {
+    showStatus("❌ Ошибка отправки:\n" + errors.join("\n"), "error");
     btn.disabled = false;
-    btn.innerText = "Попробовать снова";
+    btn.innerText = "ПОПРОБОВАТЬ СНОВА";
   }
 }
 

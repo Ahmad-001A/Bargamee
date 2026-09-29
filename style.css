@@ -2,26 +2,33 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background-color: #0B0E14;
   color: #F1F5F9;
   padding: 12px;
-  user-select: none;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  overflow-x: hidden;
+}
+
+#app-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .logo {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 900;
   color: #38BDF8;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
 }
 
 .subtitle {
@@ -31,47 +38,48 @@ body {
 }
 
 .section-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
-  margin-bottom: 12px;
-  color: #F8FAFC;
+  margin-bottom: 10px;
+  color: #94A3B8;
+  text-transform: uppercase;
 }
 
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* КАТАЛОГ ИГР */
+/* МОБИЛЬНАЯ СЕТКА ИГР (2 КОЛОНКИ) */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
 .game-card {
   background: #131722;
   border: 1px solid #1E2435;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.15s ease, border-color 0.15s ease;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.1s ease;
 }
 
 .game-card:active {
-  transform: scale(0.96);
+  transform: scale(0.97);
   border-color: #38BDF8;
 }
 
 .game-banner-img {
   width: 100%;
-  height: 90px;
+  height: 120px;
   object-fit: cover;
   background-color: #1E2435;
 }
 
 .game-info {
-  padding: 8px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -79,29 +87,22 @@ body {
 }
 
 .game-title {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #FFFFFF;
-  line-height: 1.2;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .game-desc {
-  font-size: 9px;
+  font-size: 10px;
   color: #64748B;
-  line-height: 1.1;
-  margin-bottom: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  margin-bottom: 8px;
 }
 
 .game-action {
-  font-size: 10px;
+  font-size: 11px;
   color: #38BDF8;
   font-weight: 600;
-  margin-top: auto;
 }
 
 /* ОФОРМЛЕНИЕ ЗАКАЗА */
@@ -109,27 +110,27 @@ body {
   background: none;
   border: none;
   color: #38BDF8;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
+  padding: 8px 0;
+  margin-bottom: 10px;
   cursor: pointer;
-  margin-bottom: 12px;
 }
 
 .game-header-banner {
   background: #131722;
   border: 1px solid #1E2435;
   border-radius: 12px;
-  overflow: hidden;
+  padding: 10px;
   display: flex;
   align-items: center;
-  padding: 10px;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .game-header-banner img {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   border-radius: 10px;
   object-fit: cover;
 }
@@ -137,23 +138,23 @@ body {
 .game-header-info h2 { font-size: 16px; color: #FFF; }
 .game-header-info p { font-size: 11px; color: #64748B; margin-top: 2px; }
 
-.form-group { margin-bottom: 16px; }
-.form-group label {
+.form-group { margin-bottom: 14px; }
+.input-label {
   display: block;
   font-size: 12px;
   color: #94A3B8;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-weight: 600;
 }
 
-input[type="text"], input[type="file"] {
+input[type="text"] {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: #131722;
   border: 1px solid #1E2435;
   border-radius: 10px;
   color: #FFF;
-  font-size: 13px;
+  font-size: 14px;
   outline: none;
 }
 
@@ -161,10 +162,26 @@ input[type="text"]:focus {
   border-color: #38BDF8;
 }
 
+input[type="file"] { display: none; }
+
+.file-upload-btn {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  background: #131722;
+  border: 1px dashed #38BDF8;
+  border-radius: 10px;
+  color: #38BDF8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .file-status {
   font-size: 11px;
-  color: #38BDF8;
-  margin-top: 4px;
+  color: #10B981;
+  margin-top: 6px;
+  word-break: break-all;
 }
 
 /* ТЕГИ РЕГИОНОВ И СЕРВЕРОВ */
@@ -178,9 +195,9 @@ input[type="text"]:focus {
   background: #131722;
   border: 1px solid #1E2435;
   color: #94A3B8;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -190,19 +207,18 @@ input[type="text"]:focus {
   border-color: #38BDF8;
 }
 
-/* КАТЕГОРИИ И КАРТОЧКИ ТОВАРОВ */
+/* КАТЕГОРИИ И СЕТКА ТОВАРОВ (2 КОЛОНКИ НА МОБИЛКЕ) */
 .category-title {
   font-size: 12px;
   font-weight: 700;
   color: #38BDF8;
-  margin: 14px 0 8px 0;
+  margin: 12px 0 6px 0;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .goods-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
 }
 
@@ -210,15 +226,14 @@ input[type="text"]:focus {
   background: #131722;
   border: 1px solid #1E2435;
   border-radius: 10px;
-  padding: 10px 6px;
+  padding: 10px 8px;
   text-align: center;
   cursor: pointer;
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
-  min-height: 80px;
+  min-height: 70px;
 }
 
 .item-card.selected {
@@ -239,36 +254,29 @@ input[type="text"]:focus {
 }
 
 .item-name {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #F1F5F9;
-  margin-top: 4px;
-}
-
-.item-subtext {
-  font-size: 8px;
-  color: #64748B;
-  margin-top: 2px;
 }
 
 .item-price {
-  font-size: 11px;
+  font-size: 12px;
   color: #38BDF8;
   font-weight: 800;
   margin-top: 6px;
 }
 
-/* ОПЛАТА И ЧЕК */
+/* ОПЛАТА */
 .payment-methods { display: flex; gap: 8px; }
 
 .pay-btn {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   background: #131722;
   border: 1px solid #1E2435;
   border-radius: 8px;
   color: #FFF;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -285,29 +293,42 @@ input[type="text"]:focus {
   padding: 12px;
   border-radius: 10px;
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
+.req-title { font-size: 12px; color: #94A3B8; }
+
 .req-number {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: #38BDF8;
-  margin: 4px 0;
+  margin: 6px 0;
 }
 
 .btn-copy {
   background: #1E293B;
   border: none;
   color: #FFF;
-  padding: 6px 12px;
-  font-size: 11px;
+  padding: 8px 14px;
+  font-size: 12px;
   border-radius: 6px;
   cursor: pointer;
 }
 
+/* БАННЕР ОШИБКИ */
+.error-banner {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid #EF4444;
+  color: #FCA5A5;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
 .btn-submit {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   background: #0284C7;
   border: none;
   border-radius: 12px;
@@ -315,4 +336,9 @@ input[type="text"]:focus {
   font-size: 15px;
   font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.btn-submit:active {
+  background: #0369A1;
 }

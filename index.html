@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>SNG GAME BAR</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">SNG GAME BAR</div>
+    <div class="subtitle">Официальный сервис пополнения игр</div>
+  </header>
+
+  <main class="container">
+    <!-- ЭКРАН 1: ВЫБОР ИГРЫ -->
+    <section id="step-game" class="screen active">
+      <div class="section-title">Популярное</div>
+      <div class="game-grid" id="main-game-grid">
+        <!-- Карточки игр с баннерами генерируются автоматически -->
+      </div>
+    </section>
+
+    <!-- ЭКРАН 2: ОФОРМЛЕНИЕ ЗАКАЗА -->
+    <section id="step-order" class="screen">
+      <button class="btn-back" onclick="goBack()">← Весь каталог</button>
+
+      <div class="game-header-banner" id="active-game-header">
+        <h2 id="selected-game-title">Название игры</h2>
+        <p id="selected-game-desc">Описание игры</p>
+      </div>
+
+      <!-- Поле ввода ID -->
+      <div class="form-group">
+        <label>Данные аккаунта (User ID / Никнейм):</label>
+        <input type="text" id="player-id" placeholder="Введите ваш ID игрока..." required>
+      </div>
+
+      <!-- Выбор номинала/товара -->
+      <div class="form-group">
+        <label>Выберите номинал:</label>
+        <div id="goods-container" class="goods-grid">
+          <!-- Товары подгружаются динамически -->
+        </div>
+      </div>
+
+      <!-- Способ оплаты -->
+      <div class="form-group">
+        <label>Способ оплаты:</label>
+        <div class="payment-methods">
+          <button type="button" class="pay-btn active" onclick="setPaymentMethod('Алиф Моби')">Алиф Моби</button>
+          <button type="button" class="pay-btn" onclick="setPaymentMethod('DC Dushanbe City')">DC Bank</button>
+        </div>
+      </div>
+
+      <!-- Реквизиты -->
+      <div class="requisites-box">
+        <div class="req-title">Реквизиты для перевода (<span id="pay-method-name">Алиф Моби</span>):</div>
+        <div class="req-number" id="req-card">+992931088151</div>
+        <button type="button" class="btn-copy" onclick="copyCard()">Скопировать номер</button>
+      </div>
+
+      <!-- Чек -->
+      <div class="form-group">
+        <label>Прикрепите скриншот чека:</label>
+        <input type="file" id="receipt-input" accept="image/*">
+      </div>
+
+      <button class="btn-submit" onclick="sendOrder()">Подтвердить и отправить</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

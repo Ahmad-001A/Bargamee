@@ -1,0 +1,227 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  background-color: #0D0E15;
+  color: #FFFFFF;
+  padding: 14px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 900;
+  color: #38BDF8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #F8FAFC;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* Сетка каталога с банерами */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.game-card {
+  background: #161824;
+  border: 1px solid #232738;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-card:active {
+  transform: scale(0.97);
+  border-color: #38BDF8;
+}
+
+.game-banner-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  background-color: #232738;
+}
+
+.game-info {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.game-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+
+.game-desc {
+  font-size: 10px;
+  color: #64748B;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.game-action {
+  font-size: 11px;
+  color: #38BDF8;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Форма заказа */
+.btn-back {
+  background: none;
+  border: none;
+  color: #38BDF8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.game-header-banner {
+  background: #161824;
+  border: 1px solid #232738;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.game-header-banner h2 { font-size: 18px; color: #FFF; }
+.game-header-banner p { font-size: 12px; color: #64748B; margin-top: 4px; }
+
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 12px;
+  color: #94A3B8;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+input[type="text"], input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  background: #161824;
+  border: 1px solid #232738;
+  border-radius: 10px;
+  color: #FFF;
+  font-size: 13px;
+}
+
+/* Сетка товаров */
+.goods-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.item-card {
+  background: #161824;
+  border: 1px solid #232738;
+  border-radius: 10px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.item-card.selected {
+  border-color: #38BDF8;
+  background: #132435;
+}
+
+.item-icon { font-size: 20px; margin-bottom: 4px; }
+.item-name { font-size: 12px; font-weight: 700; color: #F1F5F9; display: block; }
+.item-price { font-size: 12px; color: #38BDF8; font-weight: 800; margin-top: 4px; display: block; }
+
+.payment-methods { display: flex; gap: 8px; }
+
+.pay-btn {
+  flex: 1;
+  padding: 10px;
+  background: #161824;
+  border: 1px solid #232738;
+  border-radius: 8px;
+  color: #FFF;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.pay-btn.active {
+  border-color: #38BDF8;
+  background: #132435;
+  color: #38BDF8;
+  font-weight: bold;
+}
+
+.requisites-box {
+  background: #131F2E;
+  border: 1px dashed #38BDF8;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.req-number {
+  font-size: 16px;
+  font-weight: bold;
+  color: #38BDF8;
+  margin: 4px 0;
+}
+
+.btn-copy {
+  background: #1E293B;
+  border: none;
+  color: #FFF;
+  padding: 6px 12px;
+  font-size: 11px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: #0284C7;
+  border: none;
+  border-radius: 12px;
+  color: #FFF;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}

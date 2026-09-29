@@ -2,81 +2,89 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SNG GAME BAR</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="header">
-    <div class="logo">SNG GAME BAR</div>
-    <div class="subtitle">Официальный сервис пополнения игр</div>
-  </header>
+  <div id="app-wrapper">
+    <header class="header">
+      <div class="logo">SNG GAME BAR</div>
+      <div class="subtitle">Пополнение игр & сервисов</div>
+    </header>
 
-  <main class="container">
-    <!-- ЭКРАН 1: ВЫБОР ИГРЫ -->
-    <section id="step-game" class="screen active">
-      <div class="section-title">Популярное</div>
-      <div class="game-grid" id="main-game-grid"></div>
-    </section>
+    <main class="container">
+      <!-- ЭКРАН 1: ВЫБОР ИГРЫ -->
+      <section id="step-game" class="screen active">
+        <div class="section-title">Каталог игр</div>
+        <div class="game-grid" id="main-game-grid"></div>
+      </section>
 
-    <!-- ЭКРАН 2: ОФОРМЛЕНИЕ ЗАКАЗА -->
-    <section id="step-order" class="screen">
-      <button class="btn-back" onclick="goBack()">← Весь каталог</button>
+      <!-- ЭКРАН 2: ОФОРМЛЕНИЕ ЗАКАЗА -->
+      <section id="step-order" class="screen">
+        <button type="button" class="btn-back" onclick="goBack()">← Вернуться в каталог</button>
 
-      <div class="game-header-banner">
-        <img id="selected-game-banner" src="" alt="Banner">
-        <div class="game-header-info">
-          <h2 id="selected-game-title">Название игры</h2>
-          <p id="selected-game-desc">Описание игры</p>
+        <div class="game-header-banner">
+          <img id="selected-game-banner" src="" alt="Poster">
+          <div class="game-header-info">
+            <h2 id="selected-game-title">Игра</h2>
+            <p id="selected-game-desc">Описание</p>
+          </div>
         </div>
-      </div>
 
-      <!-- ВЫБОР РЕГИОНА / СЕРВЕРА (если требуется) -->
-      <div class="form-group" id="region-selector-group" style="display: none;">
-        <label id="region-label">Регион / Сервер:</label>
-        <div id="region-buttons" class="tags-grid"></div>
-      </div>
-
-      <!-- ВВОД ДАННЫХ АККАУНТА -->
-      <div class="form-group">
-        <label id="player-id-label">Данные аккаунта (User ID / Никнейм):</label>
-        <input type="text" id="player-id" placeholder="Введите ваш ID игрока..." autocomplete="off">
-      </div>
-
-      <!-- КАТАЛОГ ТОВАРОВ И НОМИНАЛОВ -->
-      <div class="form-group">
-        <label>Выберите номинал:</label>
-        <div id="goods-container"></div>
-      </div>
-
-      <!-- ВЫБОР СПОСОБА ОПЛАТЫ -->
-      <div class="form-group">
-        <label>Способ оплаты:</label>
-        <div class="payment-methods">
-          <button type="button" class="pay-btn active" onclick="setPaymentMethod('Алиф Моби')">Алиф Моби</button>
-          <button type="button" class="pay-btn" onclick="setPaymentMethod('DC Bank')">DC Bank</button>
+        <!-- ВЫБОР РЕГИОНА / СЕРВЕРА -->
+        <div class="form-group" id="region-selector-group" style="display: none;">
+          <label id="region-label" class="input-label">Регион / Сервер:</label>
+          <div id="region-buttons" class="tags-grid"></div>
         </div>
-      </div>
 
-      <!-- РЕКВИЗИТЫ -->
-      <div class="requisites-box">
-        <div class="req-title">Реквизиты для перевода (<span id="pay-method-name">Алиф Моби</span>):</div>
-        <div class="req-number" id="req-card">+992931088151</div>
-        <button type="button" class="btn-copy" onclick="copyCard()">Скопировать номер</button>
-      </div>
+        <!-- ВВОД ID -->
+        <div class="form-group">
+          <label class="input-label">Данные аккаунта (User ID / Ник):</label>
+          <input type="text" id="player-id" placeholder="Введите ваш ID игрока" autocomplete="off" inputmode="numeric">
+        </div>
 
-      <!-- ЗАГРУЗКА ЧЕКА -->
-      <div class="form-group">
-        <label>Прикрепите скриншот чека:</label>
-        <input type="file" id="receipt-input" accept="image/*" onchange="handleReceiptChange()">
-        <div id="receipt-filename" class="file-status"></div>
-      </div>
+        <!-- КАТАЛОГ ТОВАРОВ -->
+        <div class="form-group">
+          <label class="input-label">Выберите товар:</label>
+          <div id="goods-container"></div>
+        </div>
 
-      <!-- КНОПКА ОТПРАВКИ -->
-      <button class="btn-submit" onclick="sendOrder()">Подтвердить и отправить</button>
-    </section>
-  </main>
+        <!-- ВЫБОР СПОСОБА ОПЛАТЫ -->
+        <div class="form-group">
+          <label class="input-label">Способ оплаты:</label>
+          <div class="payment-methods">
+            <button type="button" class="pay-btn active" id="pay-alif" onclick="setPaymentMethod('Алиф Моби')">Алиф Моби</button>
+            <button type="button" class="pay-btn" id="pay-dc" onclick="setPaymentMethod('DC Bank')">DC Bank</button>
+          </div>
+        </div>
+
+        <!-- РЕКВИЗИТЫ -->
+        <div class="requisites-box">
+          <div class="req-title">Переведите сумму на <span id="pay-method-name">Алиф Моби</span>:</div>
+          <div class="req-number" id="req-card">+992931088151</div>
+          <button type="button" class="btn-copy" onclick="copyCard()">Скопировать номер</button>
+        </div>
+
+        <!-- ЗАГРУЗКА ЧЕКА -->
+        <div class="form-group">
+          <label class="input-label">Прикрепите чек оплаты:</label>
+          <label for="receipt-input" class="file-upload-btn">
+            <span id="file-label-text">📷 Выбрать фото чека</span>
+          </label>
+          <input type="file" id="receipt-input" accept="image/*" onchange="handleReceiptChange()">
+          <div id="receipt-filename" class="file-status"></div>
+        </div>
+
+        <!-- ОШИБКА НА ЭКРАНЕ -->
+        <div id="error-box" class="error-banner" style="display: none;"></div>
+
+        <!-- КНОПКА ОТПРАВКИ -->
+        <button type="button" class="btn-submit" id="submit-btn" onclick="sendOrder()">Подтвердить и отправить</button>
+      </section>
+    </main>
+  </div>
 
   <script src="app.js"></script>
 </body>

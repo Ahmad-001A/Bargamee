@@ -2,104 +2,1041 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>SNG GAME BAR</title>
+  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-main: #0a0d14;
+      --bg-card: rgba(18, 24, 38, 0.7);
+      --bg-card-hover: rgba(30, 41, 59, 0.8);
+      --accent: #00f0ff;
+      --accent-purple: #8b5cf6;
+      --accent-gradient: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-active: rgba(0, 240, 255, 0.5);
+      --success: #22c55e;
+      --error: #ef4444;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(0,240,255,0.15) 0%, rgba(112,0,255,0.1) 50%, transparent 70%);
+      filter: blur(60px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 680px;
+      padding: 16px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--accent-gradient);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff 30%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-status {
+      font-size: 12px;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    @media (min-width: 520px) {
+      .game-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .game-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-card:hover, .game-card:active {
+      transform: translateY(-3px);
+      border-color: var(--border-active);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .game-cover-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 60%;
+      overflow: hidden;
+      background: #1e293b;
+    }
+
+    .game-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .game-card:hover .game-cover {
+      transform: scale(1.05);
+    }
+
+    .game-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 6px;
+    }
+
+    .game-info {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-grow: 1;
+    }
+
+    .game-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .game-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .game-btn-action {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      cursor: pointer;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-sm);
+    }
+
+    .order-header-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .order-header-img {
+      width: 70px;
+      height: 70px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+      letter-spacing: 0.5px;
+    }
+
+    .tags-flex {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag-btn.active {
+      border-color: var(--accent);
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--accent);
+    }
+
+    .cat-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 16px 0 10px 0;
+      color: var(--accent);
+    }
+
+    .goods-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .goods-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 70px;
+    }
+
+    .goods-card.selected {
+      border-color: var(--accent);
+      background: rgba(0, 240, 255, 0.08);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+    }
+
+    .goods-name {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .goods-price {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    .goods-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--accent-gradient);
+      font-size: 8px;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #000;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+    }
+
+    .pay-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .pay-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .pay-card.active {
+      border-color: var(--accent);
+      background: rgba(0, 240, 255, 0.1);
+      color: var(--accent);
+    }
+
+    .req-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--border);
+      padding: 14px;
+      border-radius: var(--radius-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .req-num {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    .copy-btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .file-upload-wrap {
+      position: relative;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .file-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent-gradient);
+      border: none;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 240, 255, 0.25);
+      transition: all 0.2s;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status-box {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .status-box.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--error);
+      color: #fca5a5;
+    }
+
+    .status-box.success {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--success);
+      color: #86efac;
+    }
+  </style>
 </head>
 <body>
-  <div id="app">
-    <!-- Шапка в киберспортивном стиле -->
-    <header class="app-header">
-      <div class="logo-container">
-        <span class="logo-icon">🎮</span>
-        <h1 class="logo-title">SNG <span class="neon-text">GAME BAR</span></h1>
+
+  <div class="app-container">
+    
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">🎮</div>
+        <div>
+          <div class="brand-title">SNG GAME BAR</div>
+          <div class="brand-status"><span class="status-dot"></span> Пополнение 24/7</div>
+        </div>
       </div>
-      <p class="subtitle">⚡ МОМЕНТАЛЬНОЕ ПОПОЛНЕНИЕ ИГР</p>
     </header>
 
-    <!-- Экран 1: Каталог -->
-    <section id="screen-catalog" class="screen active">
-      <div class="section-label"><span class="pulse-dot"></span> Выберите игру</div>
-      <div class="game-grid" id="game-grid"></div>
-    </section>
+    <main id="screen-catalog" class="screen active">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Поиск игры или услуги..." oninput="filterGames()">
+      </div>
 
-    <!-- Экран 2: Оформление заказа -->
-    <section id="screen-order" class="screen">
-      <button type="button" class="btn-back" onclick="showCatalog()">◀ НАЗАД В КАТАЛОГ</button>
+      <div class="section-title">Выберите игру</div>
+      <div id="game-grid" class="game-grid"></div>
+    </main>
 
-      <div class="game-banner-card">
-        <img id="order-game-img" src="" alt="Game Poster" referrerpolicy="no-referrer">
-        <div class="game-banner-info">
-          <h2 id="order-game-title">Название игры</h2>
-          <p id="order-game-desc">Описание</p>
+    <main id="screen-order" class="screen">
+      <div class="nav-back" onclick="showCatalog()">◀ Назад в каталог</div>
+
+      <div class="order-header-card">
+        <img id="order-game-img" src="" class="order-header-img" alt="">
+        <div>
+          <h2 id="order-game-title" style="font-size: 18px; font-weight: 800;"></h2>
+          <p id="order-game-desc" style="font-size: 12px; color: var(--text-muted);"></p>
         </div>
       </div>
 
-      <!-- Выбор региона -->
-      <div class="form-group" id="group-region" style="display: none;">
-        <label id="region-label" class="label">ВЫБОР СЕРВЕРА / РЕГИОНА:</label>
-        <div id="region-tags" class="tags-container"></div>
+      <div id="group-region" class="form-group" style="display: none;">
+        <label id="region-label" class="form-label">ВЫБЕРИТЕ СЕРВЕР / РЕГИОН:</label>
+        <div id="region-tags" class="tags-flex"></div>
       </div>
 
-      <!-- Ввод ID -->
       <div class="form-group">
-        <label class="label">ДАННЫЕ АККАУНТА (USER ID / НИК):</label>
-        <div class="input-wrapper">
-          <input type="text" id="player-id" class="input-field" placeholder="Введите ваш ID игрока" autocomplete="off">
-        </div>
-      </div>
-
-      <!-- Выбор товара -->
-      <div class="form-group">
-        <label class="label">ВЫБЕРИТЕ ДУНАТ-ПАКЕТ:</label>
+        <label class="form-label">ВЫБЕРИТЕ ТОВАР:</label>
         <div id="goods-container"></div>
       </div>
 
-      <!-- Способ оплаты -->
       <div class="form-group">
-        <label class="label">СПОСОБ ОПЛАТЫ:</label>
-        <div class="payment-selector">
-          <button type="button" class="pay-card active" id="pay-alif" onclick="selectPayment('Алиф Моби')">
-            <span class="pay-title">Алиф Моби</span>
-          </button>
-          <button type="button" class="pay-card" id="pay-dc" onclick="selectPayment('DC Bank')">
-            <span class="pay-title">DC Bank</span>
-          </button>
-        </div>
+        <label class="form-label">ВАШ PLAYER ID / ТЕГ / АККАУНТ:</label>
+        <input type="text" id="player-id" class="input-field" placeholder="Например: 512345678">
       </div>
 
-      <!-- Реквизиты -->
-      <div class="requisites-card">
-        <span class="req-title">Переведите сумму на <strong id="req-method-name">Алиф Моби</strong>:</span>
-        <div class="req-number-row">
-          <span id="req-number">+992931088151</span>
-          <button type="button" class="btn-copy" onclick="copyRequisites()">Скопировать</button>
-        </div>
-      </div>
-
-      <!-- Загрузка чека -->
       <div class="form-group">
-        <label class="label">ПРИКРЕПИТЕ СКРИНШОТ ЧЕКА:</label>
-        <label for="receipt-file" class="file-dropzone" id="file-dropzone">
-          <div class="dropzone-content">
-            <span class="dropzone-icon">📸</span>
-            <span id="file-text">НАЖМИТЕ, ЧТОБЫ ВЫБРАТЬ ЧЕК</span>
+        <label class="form-label">СПОСОБ ОПЛАТЫ:</label>
+        <div class="pay-grid">
+          <div id="pay-alif" class="pay-card active" onclick="selectPayment('Алиф Моби')">Алиф Моби</div>
+          <div id="pay-dc" class="pay-card" onclick="selectPayment('DC Bank')">DC Bank</div>
+        </div>
+
+        <div class="req-box">
+          <div>
+            <div id="req-method-name" style="font-size: 11px; color: var(--text-muted);">Перевод на Алиф Моби:</div>
+            <div id="req-number" class="req-num">+992931088151</div>
           </div>
-        </label>
-        <input type="file" id="receipt-file" accept="image/*" onchange="onFileSelected()">
+          <button type="button" class="copy-btn" onclick="copyRequisites()">СКОПИРОВАТЬ</button>
+        </div>
       </div>
 
-      <!-- Статус -->
-      <div id="status-message" class="status-box" style="display: none;"></div>
+      <div class="form-group">
+        <label class="form-label">ПРИКРЕПИТЕ СКРИНШОТ ЧЕКА:</label>
+        <div class="file-upload-wrap">
+          <input type="file" id="receipt-file" class="file-input" accept="image/*" onchange="onFileSelected()">
+          <label for="receipt-file" class="file-btn">
+            <span>🧾</span> <span id="file-text">НАЖМИТЕ, ЧТОБЫ ВЫБРАТЬ ЧЕК</span>
+          </label>
+        </div>
+      </div>
 
-      <!-- Кнопка -->
-      <button type="button" class="btn-primary" id="btn-submit" onclick="submitOrder()">
-        <span>ОФОРМИТЬ ЗАКАЗ 🚀</span>
-      </button>
-    </section>
+      <div id="status-message" class="status-box"></div>
+
+      <button id="btn-submit" type="button" class="submit-btn" onclick="submitOrder()">ОТПРАВИТЬ ЗАКАЗ</button>
+    </main>
+
   </div>
 
-  <script src="app.js"></script>
+  <script>
+    const BOT_TOKEN = "ВАШ_ТОКЕН_БОТА";
+    const ADMIN_IDS = [
+      "123456789",
+      "987654321"
+    ];
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    // ОБНОВЛЕННЫЙ КАТАЛОГ С ВАШИМИ НОВЫМИ ЦЕНАМИ
+    const catalog = [
+      {
+        id: "pubg",
+        name: "PUBG Mobile",
+        desc: "Пополнение UC по ID",
+        badge: "HOT",
+        banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Пакеты UC",
+            items: [
+              { name: "60 UC", price: "15 смн." },
+              { name: "300 + 25 UC", bonus: "БОНУС", price: "50 смн." },
+              { name: "600 + 60 UC", bonus: "ХИТ", price: "100 смн." },
+              { name: "1500 + 300 UC", price: "250 смн." },
+              { name: "3000 + 850 UC", price: "460 смн." },
+              { name: "6000 + 2100 UC", price: "880 смн." }
+            ]
+          },
+          {
+            title: "Подписки",
+            items: [
+              { name: "Royale Pass", price: "60 смн." },
+              { name: "Elite Pass Plus", price: "290 смн." },
+              { name: "Prime (1 мес)", price: "15 смн." },
+              { name: "Prime Plus (1 мес)", price: "100 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "freefire",
+        name: "Free Fire",
+        desc: "Алмазы и ваучеры",
+        badge: "POPULAR",
+        banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Алмазы",
+            items: [
+              { name: "100 + 10 Алмазов", price: "10.0 смн." },
+              { name: "310 + 31 Алмаз", price: "30.0 смн." },
+              { name: "520 + 52 Алмаза", price: "50.0 смн." },
+              { name: "1060 + 106 Алмазов", price: "95.0 смн." },
+              { name: "2180 + 218 Алмазов", price: "195.0 смн." }
+            ]
+          },
+          {
+            title: "Ваучеры",
+            items: [
+              { name: "Недельный ваучер", price: "18.50 смн." },
+              { name: "Месячный ваучер", price: "80.0 смн." }
+            ]
+          },
+          {
+            title: "Пропуск прокачки",
+            items: [
+              { name: "6 уровень", price: "5 смн." },
+              { name: "10 уровень", price: "7.80 смн." },
+              { name: "15 уровень", price: "7.80 смн." },
+              { name: "20 уровень", price: "8.0 смн." },
+              { name: "25 уровень", price: "8.0 смн." },
+              { name: "30 уровень", price: "10.50 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "mlbb",
+        name: "Mobile Legends",
+        desc: "Алмазы по ID",
+        badge: "TOP",
+        banner: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Алмазы MLBB",
+            items: [
+              { name: "86 Алмазов", price: "16.0 смн." },
+              { name: "172 Алмаза", price: "30.0 смн." },
+              { name: "257 Алмазов", price: "53.0 смн." },
+              { name: "706 Алмазов", price: "125.0 смн." },
+              { name: "2195 Алмазов", price: "320.0 смн." }
+            ]
+          },
+          {
+            title: "Пропуска",
+            items: [
+              { name: "Недельный пропуск", price: "20.0 смн." },
+              { name: "Twilight Pass", price: "88.0 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "tg_services",
+        name: "Telegram Премиум & Stars",
+        desc: "Подписки и Звезды",
+        badge: "NEW",
+        banner: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Telegram Premium",
+            items: [
+              { name: "Premium (3 месяца)", price: "115.00 смн." },
+              { name: "Premium (6 месяцев)", price: "175.00 смн." },
+              { name: "Premium (12 месяцев)", price: "290.00 смн." }
+            ]
+          },
+          {
+            title: "Telegram Stars",
+            items: [
+              { name: "50 Звезд", price: "14.00 смн." },
+              { name: "100 Звезд", price: "27.50 смн." },
+              { name: "250 Звезд", price: "68.00 смн." },
+              { name: "500 Звезд", price: "135.00 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "genshin",
+        name: "Genshin Impact",
+        desc: "Кристаллы и Луна",
+        banner: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80",
+        servers: ["Европа", "Азия", "Америка", "TW/HK/MO"],
+        categories: [
+          {
+            title: "Кристаллы Сотворения",
+            items: [
+              { name: "Благословение луны", price: "58.0 смн." },
+              { name: "60 Кристаллов", price: "15.0 смн." },
+              { name: "300+30 Кристаллов", price: "58.0 смн." },
+              { name: "980+110 Кристаллов", price: "170.0 смн." },
+              { name: "1980+260 Кристаллов", price: "330.0 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "codm",
+        name: "CoD Mobile",
+        desc: "CP Пополнение",
+        badge: "SALE",
+        banner: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80",
+        regions: ["Казахстан / СНГ", "США", "Индия", "Европа"],
+        categories: [
+          {
+            title: "Пакеты CP",
+            items: [
+              { name: "80 CP", price: "15.0 смн." },
+              { name: "420 CP", price: "48.0 смн." },
+              { name: "880 CP", price: "90.0 смн." },
+              { name: "2400 CP", price: "225.0 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "roblox",
+        name: "Roblox",
+        desc: "Robux кодами",
+        banner: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Пакеты Robux",
+            items: [
+              { name: "100 Robux", price: "20.0 смн." },
+              { name: "400 Robux", price: "60.0 смн." },
+              { name: "800 Robux", price: "99.0 смн." },
+              { name: "2000 Robux", price: "230.0 смн." }
+            ]
+          }
+        ]
+      }
+    ];
+
+    let selectedGame = null;
+    let selectedGoods = null;
+    let selectedServerRegion = null;
+    let selectedPayment = "Алиф Моби";
+
+    function renderCatalog(items) {
+      const grid = document.getElementById("game-grid");
+      grid.innerHTML = "";
+
+      items.forEach(game => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        card.onclick = () => openGame(game);
+
+        card.innerHTML = `
+          <div class="game-cover-wrap">
+            ${game.badge ? `<span class="game-badge">${game.badge}</span>` : ''}
+            <img src="${game.banner}" class="game-cover" alt="${game.name}" loading="lazy">
+          </div>
+          <div class="game-info">
+            <div>
+              <div class="game-title">${game.name}</div>
+              <div class="game-desc">${game.desc}</div>
+            </div>
+            <div class="game-btn-action">ПОПОЛНИТЬ ➔</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterGames() {
+      const query = document.getElementById("search-input").value.toLowerCase();
+      const filtered = catalog.filter(g => g.name.toLowerCase().includes(query) || g.desc.toLowerCase().includes(query));
+      renderCatalog(filtered);
+    }
+
+    function openGame(game) {
+      selectedGame = game;
+      resetForm();
+
+      document.getElementById("order-game-title").innerText = game.name;
+      document.getElementById("order-game-desc").innerText = game.desc;
+      document.getElementById("order-game-img").src = game.banner;
+
+      const regionGroup = document.getElementById("group-region");
+      const regionTags = document.getElementById("region-tags");
+      regionTags.innerHTML = "";
+
+      const options = game.regions || game.servers;
+      if (options && options.length > 0) {
+        regionGroup.style.display = "block";
+        document.getElementById("region-label").innerText = game.regions ? "РЕГИОН АККАУНТА:" : "ВЫБЕРИТЕ СЕРВЕР:";
+        options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = `tag-btn ${idx === 0 ? 'active' : ''}`;
+          btn.innerText = opt;
+          btn.onclick = () => {
+            document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedServerRegion = opt;
+          };
+          regionTags.appendChild(btn);
+        });
+        selectedServerRegion = options[0];
+      } else {
+        regionGroup.style.display = "none";
+      }
+
+      const container = document.getElementById("goods-container");
+      container.innerHTML = "";
+
+      game.categories.forEach(cat => {
+        const catTitle = document.createElement("div");
+        catTitle.className = "cat-title";
+        catTitle.innerText = cat.title;
+        container.appendChild(catTitle);
+
+        const grid = document.createElement("div");
+        grid.className = "goods-grid";
+
+        cat.items.forEach(item => {
+          const itemCard = document.createElement("div");
+          itemCard.className = "goods-card";
+          itemCard.onclick = () => {
+            document.querySelectorAll('.goods-card').forEach(c => c.classList.remove('selected'));
+            itemCard.classList.add('selected');
+            selectedGoods = item;
+            hideStatus();
+          };
+
+          itemCard.innerHTML = `
+            ${item.bonus ? `<span class="goods-badge">${item.bonus}</span>` : ''}
+            <div class="goods-name">${item.name}</div>
+            <div class="goods-price">${item.price}</div>
+          `;
+          grid.appendChild(itemCard);
+        });
+
+        container.appendChild(grid);
+      });
+
+      document.getElementById("screen-catalog").classList.remove("active");
+      document.getElementById("screen-order").classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function showCatalog() {
+      resetForm();
+      document.getElementById("screen-order").classList.remove("active");
+      document.getElementById("screen-catalog").classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function selectPayment(method) {
+      selectedPayment = method;
+      document.getElementById("req-method-name").innerText = `Перевод на ${method}:`;
+
+      document.getElementById("pay-alif").classList.toggle("active", method === "Алиф Моби");
+      document.getElementById("pay-dc").classList.toggle("active", method === "DC Bank");
+
+      document.getElementById("req-number").innerText = (method === "Алиф Моби") ? "+992931088151" : "+992009096449";
+    }
+
+    function copyRequisites() {
+      const num = document.getElementById("req-number").innerText;
+      navigator.clipboard.writeText(num);
+      showStatus("✅ Реквизиты скопированы!", "success");
+    }
+
+    function onFileSelected() {
+      const fileInput = document.getElementById("receipt-file");
+      if (fileInput.files && fileInput.files[0]) {
+        document.getElementById("file-text").innerText = "✅ ЧЕК ВЫБРАН: " + fileInput.files[0].name;
+        hideStatus();
+      }
+    }
+
+    function resetForm() {
+      selectedGoods = null;
+      selectedServerRegion = null;
+      hideStatus();
+      document.getElementById("player-id").value = "";
+      document.getElementById("receipt-file").value = "";
+      document.getElementById("file-text").innerText = "НАЖМИТЕ, ЧТОБЫ ВЫБРАТЬ ЧЕК";
+    }
+
+    function showStatus(text, type) {
+      const box = document.getElementById("status-message");
+      box.innerText = text;
+      box.className = `status-box ${type}`;
+      box.style.display = "block";
+    }
+
+    function hideStatus() {
+      document.getElementById("status-message").style.display = "none";
+    }
+
+    async function submitOrder() {
+      hideStatus();
+
+      const playerId = document.getElementById("player-id").value.trim();
+      const fileInput = document.getElementById("receipt-file");
+
+      if (!playerId) {
+        showStatus("⚠️ Укажите ваш ID / Имя аккаунта!", "error");
+        return;
+      }
+      if (!selectedGoods) {
+        showStatus("⚠️ Выберите товар из списка!", "error");
+        return;
+      }
+      if (!fileInput.files || !fileInput.files[0]) {
+        showStatus("⚠️ Прикрепите скриншот чека оплаты!", "error");
+        return;
+      }
+
+      const btn = document.getElementById("btn-submit");
+      btn.disabled = true;
+      btn.innerText = "ОТПРАВКА ЗАКАЗА...";
+
+      const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+      const usernameText = tgUser?.username ? `@${tgUser.username}` : (tgUser?.first_name || "Неизвестный");
+
+      const caption = 
+`🛒 *НОВЫЙ ЗАКАЗ В SNG GAME BAR!*
+
+👤 *Покупатель:* ${usernameText}
+🎮 *Услуга/Игра:* ${selectedGame.name}
+🌐 *Регион/Сервер:* ${selectedServerRegion || 'Стандарт'}
+💎 *Товар:* ${selectedGoods.name}
+💵 *Цена:* ${selectedGoods.price}
+🆔 *ID/Данные:* \`${playerId}\`
+💳 *Способ оплаты:* ${selectedPayment}`;
+
+      let successCount = 0;
+
+      for (const adminId of ADMIN_IDS) {
+        const formData = new FormData();
+        formData.append("chat_id", adminId);
+        formData.append("photo", fileInput.files[0]);
+        formData.append("caption", caption);
+        formData.append("parse_mode", "Markdown");
+
+        try {
+          const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: "POST",
+            body: formData
+          });
+          const data = await res.json();
+          if (data.ok) successCount++;
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (successCount > 0) {
+        showStatus("🚀 Ваш заказ успешно отправлен! Ожидайте зачисления.", "success");
+        btn.innerText = "ОТПРАВЛЕНО!";
+      } else {
+        showStatus("❌ Ошибка отправки. Проверьте подключение к интернету.", "error");
+        btn.disabled = false;
+        btn.innerText = "ПОПРОБОВАТЬ СНОВА";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => renderCatalog(catalog));
+  </script>
 </body>
 </html>

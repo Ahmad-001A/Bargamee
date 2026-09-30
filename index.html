@@ -521,6 +521,7 @@
       font-weight: 600;
       margin-bottom: 16px;
       display: none;
+      word-break: break-word;
     }
 
     .status-box.error {
@@ -620,10 +621,12 @@
   </div>
 
   <script>
-    const BOT_TOKEN = "ВАШ_ТОКЕН_БОТА";
+    const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8";
+    
+    // ⚠️ ВАЖНО: Вставьте сюда реальные Telegram ID администраторов (числа из 9-10 цифр)
     const ADMIN_IDS = [
-      "123456789",
-      "987654321"
+      "123456789", // Замените на ваш Telegram ID
+      "987654321"  // Замените на ID второго админа (или удалите эту строку)
     ];
 
     const tg = window.Telegram?.WebApp;
@@ -632,7 +635,7 @@
       tg.expand();
     }
 
-    // ОБНОВЛЕННЫЙ КАТАЛОГ С ВАШИМИ НОВЫМИ ЦЕНАМИ
+    // ВАШ КАТАЛОГ С ЦЕНАМИ
     const catalog = [
       {
         id: "pubg",
@@ -814,6 +817,14 @@
     let selectedServerRegion = null;
     let selectedPayment = "Алиф Моби";
 
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
     function renderCatalog(items) {
       const grid = document.getElementById("game-grid");
       grid.innerHTML = "";
@@ -994,35 +1005,45 @@
       const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
       const usernameText = tgUser?.username ? `@${tgUser.username}` : (tgUser?.first_name || "Неизвестный");
 
+      // Безопасный HTML формат (не ломается при специальных символах)
       const caption = 
-`🛒 *НОВЫЙ ЗАКАЗ В SNG GAME BAR!*
+`🛒 <b>НОВЫЙ ЗАКАЗ В SNG GAME BAR!</b>
 
-👤 *Покупатель:* ${usernameText}
-🎮 *Услуга/Игра:* ${selectedGame.name}
-🌐 *Регион/Сервер:* ${selectedServerRegion || 'Стандарт'}
-💎 *Товар:* ${selectedGoods.name}
-💵 *Цена:* ${selectedGoods.price}
-🆔 *ID/Данные:* \`${playerId}\`
-💳 *Способ оплаты:* ${selectedPayment}`;
+👤 <b>Покупатель:</b> ${escapeHtml(usernameText)}
+🎮 <b>Услуга/Игра:</b> ${escapeHtml(selectedGame.name)}
+🌐 <b>Регион/Сервер:</b> ${escapeHtml(selectedServerRegion || 'Стандарт')}
+💎 <b>Товар:</b> ${escapeHtml(selectedGoods.name)}
+💵 <b>Цена:</b> ${escapeHtml(selectedGoods.price)}
+🆔 <b>ID/Данные:</b> <code>${escapeHtml(playerId)}</code>
+💳 <b>Способ оплаты:</b> ${escapeHtml(selectedPayment)}`;
 
       let successCount = 0;
+      let lastErrorMessage = "";
 
       for (const adminId of ADMIN_IDS) {
         const formData = new FormData();
         formData.append("chat_id", adminId);
         formData.append("photo", fileInput.files[0]);
         formData.append("caption", caption);
-        formData.append("parse_mode", "Markdown");
+        formData.append("parse_mode", "HTML"); // Изменено на HTML для стабильности
 
         try {
+          // ВАЖНО: В fetch НЕТ заголовка 'Content-Type', браузер ставит его автоматически!
           const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
             method: "POST",
             body: formData
           });
+          
           const data = await res.json();
-          if (data.ok) successCount++;
+          if (data.ok) {
+            successCount++;
+          } else {
+            console.error("Ошибка Telegram API:", data);
+            lastErrorMessage = data.description || "Неизвестная ошибка Telegram";
+          }
         } catch (e) {
-          console.error(e);
+          console.error("Ошибка сети:", e);
+          lastErrorMessage = "Ошибка подключения или размер файла слишком велик.";
         }
       }
 
@@ -1030,7 +1051,7 @@
         showStatus("🚀 Ваш заказ успешно отправлен! Ожидайте зачисления.", "success");
         btn.innerText = "ОТПРАВЛЕНО!";
       } else {
-        showStatus("❌ Ошибка отправки. Проверьте подключение к интернету.", "error");
+        showStatus(`❌ Ошибка отправки: ${lastErrorMessage}`, "error");
         btn.disabled = false;
         btn.innerText = "ПОПРОБОВАТЬ СНОВА";
       }

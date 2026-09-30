@@ -19,21 +19,21 @@ const catalog = [
       {
         title: "Пакеты UC",
         items: [
-          { name: "60 UC", price: "10.15 смн." },
-          { name: "300 + 25 UC", bonus: "БОНУС", price: "47.80 смн." },
-          { name: "600 + 60 UC", bonus: "ХИТ", price: "95.35 смн." },
-          { name: "1500 + 300 UC", price: "240.40 смн." },
-          { name: "3000 + 850 UC", price: "454.10 смн." },
-          { name: "6000 + 2100 UC", price: "877.05 смн." }
+          { name: "60 UC", price: "15 смн." },
+          { name: "300 + 25 UC", bonus: "БОНУС", price: "50 смн." },
+          { name: "600 + 60 UC", bonus: "ХИТ", price: "100 смн." },
+          { name: "1500 + 300 UC", price: "250 смн." },
+          { name: "3000 + 850 UC", price: "460 смн." },
+          { name: "6000 + 2100 UC", price: "880 смн." }
         ]
       },
       {
         title: "Подписки",
         items: [
-          { name: "Royale Pass", price: "56.95 смн." },
-          { name: "Elite Pass Plus", price: "277.60 смн." },
-          { name: "Prime (1 мес)", price: "10.30 смн." },
-          { name: "Prime Plus (1 мес)", price: "94.55 смн." }
+          { name: "Royale Pass", price: "60 смн." },
+          { name: "Elite Pass Plus", price: "290 смн." },
+          { name: "Prime (1 мес)", price: "15 смн." },
+          { name: "Prime Plus (1 мес)", price: "100 смн." }
         ]
       }
     ]
@@ -48,18 +48,27 @@ const catalog = [
       {
         title: "Алмазы",
         items: [
-          { name: "100 + 10 Алмазов", price: "9.45 смн." },
-          { name: "310 + 31 Алмаз", price: "28.70 смн." },
-          { name: "520 + 52 Алмаза", price: "45.20 смн." },
-          { name: "1060 + 106 Алмазов", price: "85.55 смн." },
-          { name: "2180 + 218 Алмазов", price: "171.10 смн." }
+          { name: "100 + 10 Алмазов", price: "10.0 смн." },
+          { name: "310 + 31 Алмаз", price: "30.0 смн." },
+          { name: "520 + 52 Алмаза", price: "50.0 смн." },
+          { name: "1060 + 106 Алмазов", price: "95.0 смн." },
+          { name: "2180 + 218 Алмазов", price: "195.0 смн." }
         ]
       },
       {
         title: "Ваучеры",
         items: [
-          { name: "Недельный ваучер", price: "17.85 смн." },
-          { name: "Месячный ваучер", price: "64.75 смн." }
+          { name: "Недельный ваучер", price: "18.50 смн." },
+          { name: "Месячный ваучер", price: "80.0 смн." }
+        ]
+                title: "Пропуск прокачки",
+        items: [
+          { name: "6 уровень", price: "5 смн." },
+          { name: "10 уровень", price: "7.80 смн." }
+          { name: "15 уровень", price: "7.80 смн." }
+          { name: "20 уровень", price: "8.0 смн." }
+          { name: "25 уровень", price: "8.0 смн." }
+          { name: "30 уровень", price: "10.50 смн." }
         ]
       }
     ]
@@ -74,18 +83,18 @@ const catalog = [
       {
         title: "Алмазы MLBB",
         items: [
-          { name: "86 Алмазов", price: "13.75 смн." },
-          { name: "172 Алмаза", price: "27.50 смн." },
-          { name: "257 Алмазов", price: "49.95 смн." },
-          { name: "706 Алмазов", price: "118.40 смн." },
-          { name: "2195 Алмазов", price: "310.45 смн." }
+          { name: "86 Алмазов", price: "16.0 смн." },
+          { name: "172 Алмаза", price: "30.0 смн." },
+          { name: "257 Алмазов", price: "53.0 смн." },
+          { name: "706 Алмазов", price: "125.0 смн." },
+          { name: "2195 Алмазов", price: "320.0 смн." }
         ]
       },
       {
         title: "Пропуска",
         items: [
-          { name: "Недельный пропуск", price: "17.55 смн." },
-          { name: "Twilight Pass", price: "81.65 смн." }
+          { name: "Недельный пропуск", price: "20.0 смн." },
+          { name: "Twilight Pass", price: "88.0 смн." }
         ]
       }
     ]
@@ -100,11 +109,11 @@ const catalog = [
       {
         title: "Кристаллы Сотворения",
         items: [
-          { name: "Благословение луны", price: "53.20 смн." },
-          { name: "60 Кристаллов", price: "10.55 смн." },
-          { name: "300+30 Кристаллов", price: "53.20 смн." },
-          { name: "980+110 Кристаллов", price: "159.60 смн." },
-          { name: "1980+260 Кристаллов", price: "319.30 смн." }
+          { name: "Благословение луны", price: "58.0 смн." },
+          { name: "60 Кристаллов", price: "15.0 смн." },
+          { name: "300+30 Кристаллов", price: "58.0 смн." },
+          { name: "980+110 Кристаллов", price: "170.0 смн." },
+          { name: "1980+260 Кристаллов", price: "330.0 смн." }
         ]
       }
     ]
@@ -120,10 +129,10 @@ const catalog = [
       {
         title: "Пакеты CP",
         items: [
-          { name: "80 CP", price: "11.70 смн." },
-          { name: "420 CP", price: "42.75 смн." },
-          { name: "880 CP", price: "85.45 смн." },
-          { name: "2400 CP", price: "215.00 смн." }
+          { name: "80 CP", price: "15.0 смн." },
+          { name: "420 CP", price: "48.0 смн." },
+          { name: "880 CP", price: "90.0 смн." },
+          { name: "2400 CP", price: "225.0 смн." }
         ]
       }
     ]
@@ -137,10 +146,10 @@ const catalog = [
       {
         title: "Пакеты Robux",
         items: [
-          { name: "100 Robux", price: "17.65 смн." },
-          { name: "400 Robux", price: "55.00 смн." },
-          { name: "800 Robux", price: "92.50 смн." },
-          { name: "2000 Robux", price: "217.95 смн." }
+          { name: "100 Robux", price: "20.-0 смн." },
+          { name: "400 Robux", price: "60.0 смн." },
+          { name: "800 Robux", price: "99.0 смн." },
+          { name: "2000 Robux", price: "230.0 смн." }
         ]
       }
     ]

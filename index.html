@@ -483,7 +483,7 @@
       box-shadow: 0 0 40px rgba(34, 197, 94, 0.3);
     }
 
-    /* BOTTOM NAV (3 ITEMS) */
+    /* BOTTOM NAV (2 ВКЛАДКИ) */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -510,7 +510,7 @@
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      width: 33%;
+      width: 50%;
     }
 
     .nav-item.active {
@@ -668,19 +668,8 @@
       </div>
     </main>
 
-    <!-- 6. МОИ ДОНАТЫ И ПРОФИЛЬ -->
+    <!-- 6. МОИ ДОНАТЫ -->
     <main id="screen-profile" class="screen">
-      <div class="section-title">Профиль пользователя</div>
-      <div class="pay-option" style="margin-bottom: 20px;">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div class="user-avatar" id="profile-avatar">U</div>
-          <div>
-            <div id="profile-name" class="user-name">Пользователь</div>
-            <div id="profile-id" class="user-id">ID: 123456</div>
-          </div>
-        </div>
-      </div>
-
       <div class="section-title">История донатов</div>
       <div id="history-list">
         <div style="text-align:center; color:var(--text-muted); font-size:13px; padding:30px;">У вас пока нет активных заказов</div>
@@ -689,7 +678,7 @@
 
   </div>
 
-  <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (3 ВКЛАДКИ) -->
+  <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (2 ВКЛАДКИ) -->
   <nav id="bottom-nav" class="bottom-nav" style="display:none;">
     <div class="nav-item active" id="nav-main" onclick="navTo('screen-main', this)">
       <span class="nav-icon">🏠</span>
@@ -699,18 +688,14 @@
       <span class="nav-icon">🛡️</span>
       <span>Мои донаты</span>
     </div>
-    <div class="nav-item" id="nav-profile" onclick="navTo('screen-profile', this)">
-      <span class="nav-icon">👤</span>
-      <span>Профиль</span>
-    </div>
   </nav>
 
   <script>
     const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8";
-    const ADMIN_IDS = ["7934934196",
-                      "6940892940"]; // Вкажите ваш настоящий Telegram ID
+    const ADMIN_IDS = ["7934934196"
+                      "6940892940"]; // Укажите ваш настоящий Telegram ID
 
-    // ПОЛНЫЙ ВАШ КАТАЛОГ
+    // КАТАЛОГ ТОВАРОВ
     const catalog = [
       {
         id: "pubg",
@@ -907,7 +892,6 @@
           const defaultName = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
           document.getElementById("entry-username").value = defaultName;
           document.getElementById("user-id").innerText = "ID: " + tgUser.id;
-          document.getElementById("profile-id").innerText = "ID: " + tgUser.id;
         }
       }
       renderCatalog(catalog);
@@ -922,9 +906,7 @@
 
       state.userName = inputName;
       document.getElementById("user-name").innerText = state.userName;
-      document.getElementById("profile-name").innerText = state.userName;
       document.getElementById("user-avatar").innerText = state.userName[0].toUpperCase();
-      document.getElementById("profile-avatar").innerText = state.userName[0].toUpperCase();
 
       navTo('screen-main');
     }
@@ -976,7 +958,6 @@
       document.getElementById("game-desc").innerText = state.game.desc;
       document.getElementById("game-banner").src = state.game.banner;
 
-      // Настройка серверов / регионов
       const serverBox = document.getElementById("server-selector-box");
       const serverOptions = document.getElementById("server-options");
       const serverLabel = document.getElementById("server-label");
@@ -997,7 +978,6 @@
         serverBox.style.display = "none";
       }
 
-      // Настройка категорий и товаров
       const catContainer = document.getElementById("categories-container");
       catContainer.innerHTML = "";
 

@@ -44,11 +44,10 @@
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      padding-bottom: 80px;
+      padding-bottom: 90px;
       overflow-x: hidden;
     }
 
-    /* Фоновый неоновый свечение */
     body::before {
       content: '';
       position: fixed;
@@ -70,7 +69,6 @@
       position: relative;
     }
 
-    /* ЭКРАНЫ */
     .screen {
       display: none;
       animation: fadeIn 0.3s ease-in-out;
@@ -85,7 +83,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 1. ЭКРАН ЗАПУСКА (SPLASH) */
+    /* SPLASH SCREEN */
     .splash-container {
       display: flex;
       flex-direction: column;
@@ -96,17 +94,17 @@
     }
 
     .splash-logo {
-      width: 160px;
-      height: 160px;
+      width: 140px;
+      height: 140px;
       background: rgba(139, 92, 246, 0.1);
       border: 2px solid var(--border-glow);
-      border-radius: 40px;
+      border-radius: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 70px;
+      font-size: 60px;
       box-shadow: 0 0 50px rgba(139, 92, 246, 0.3);
-      margin-bottom: 30px;
+      margin-bottom: 24px;
       animation: pulse 2s infinite ease-in-out;
     }
 
@@ -116,34 +114,39 @@
     }
 
     .splash-title {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 900;
       letter-spacing: 1px;
       background: var(--primary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .splash-subtitle {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-muted);
-      max-width: 260px;
-      margin-bottom: 40px;
+      max-width: 280px;
+      margin-bottom: 24px;
       line-height: 1.4;
     }
 
-    /* КНОПКИ */
+    .splash-input-box {
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 20px;
+    }
+
+    /* BUTTONS & INPUTS */
     .btn-primary {
       width: 100%;
-      padding: 18px;
+      padding: 16px;
       background: var(--btn-gradient);
       border: none;
       border-radius: var(--radius-lg);
       color: #fff;
       font-size: 16px;
       font-weight: 800;
-      letter-spacing: 0.5px;
       cursor: pointer;
       box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
       display: flex;
@@ -157,7 +160,23 @@
       transform: scale(0.98);
     }
 
-    /* ШАПКА ПОЛЬЗОВАТЕЛЯ */
+    .input-field {
+      width: 100%;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-purple);
+    }
+
+    /* USER HEADER */
     .user-header {
       display: flex;
       align-items: center;
@@ -201,37 +220,25 @@
       font-size: 13px;
       font-weight: 800;
       color: #c084fc;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    /* ПОИСК */
+    /* GRID & CATALOG */
     .search-box {
       margin-bottom: 20px;
     }
 
-    .search-input {
-      width: 100%;
-      padding: 14px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    /* СЕТКА ИГР */
     .section-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 800;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .game-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
 
@@ -239,41 +246,55 @@
       background: var(--bg-card);
       border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
-      padding: 12px 8px;
-      text-align: center;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
       transition: all 0.2s;
     }
 
     .game-item:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
       border-color: var(--accent-purple);
     }
 
-    .game-icon {
-      width: 64px;
-      height: 64px;
+    .game-item-img {
+      width: 100%;
+      height: 90px;
       border-radius: var(--radius-md);
       object-fit: cover;
-      margin-bottom: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
-    .game-title {
-      font-size: 11px;
+    .game-item-title {
+      font-size: 14px;
       font-weight: 700;
-      line-height: 1.2;
-      height: 26px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    /* СТРАНИЦА ИГРЫ И ПАКЕТЫ */
+    .game-item-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .game-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: var(--primary-gradient);
+      font-size: 9px;
+      font-weight: 900;
+      padding: 3px 7px;
+      border-radius: 6px;
+      color: #fff;
+    }
+
+    /* GAME DETAILS PAGE */
     .banner-card {
       position: relative;
       width: 100%;
-      height: 160px;
+      height: 150px;
       border-radius: var(--radius-xl);
       overflow: hidden;
       margin-bottom: 20px;
@@ -294,18 +315,58 @@
       background: linear-gradient(to top, rgba(8,11,17,0.95), transparent);
     }
 
+    .selector-box {
+      margin-bottom: 16px;
+    }
+
+    .selector-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .chip-btn {
+      padding: 8px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .chip-btn.selected {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: var(--accent-purple);
+      color: #fff;
+    }
+
+    .category-group {
+      margin-bottom: 20px;
+    }
+
+    .category-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     .pack-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
     }
 
     .pack-card {
       background: var(--bg-card);
       border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
-      padding: 16px;
+      padding: 14px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -315,41 +376,31 @@
 
     .pack-card.selected {
       border-color: var(--accent-purple);
-      background: rgba(139, 92, 246, 0.12);
+      background: rgba(139, 92, 246, 0.15);
       box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
     }
 
-    .pack-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .pack-icon {
-      font-size: 22px;
-    }
-
     .pack-name {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
     }
 
-    .pack-badge {
+    .pack-bonus {
       background: var(--primary-gradient);
       font-size: 9px;
       font-weight: 800;
-      padding: 3px 7px;
-      border-radius: 6px;
-      margin-left: 8px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
     }
 
     .pack-price {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       color: var(--accent-purple);
     }
 
-    /* СПОСОБЫ ОПЛАТЫ */
+    /* PAYMENT PAGE */
     .pay-option {
       background: var(--bg-card);
       border: 1px solid var(--border-light);
@@ -412,38 +463,27 @@
       display: block;
     }
 
-    .input-field {
-      width: 100%;
-      padding: 14px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-md);
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    /* ЭКРАН УСПЕХА */
+    /* SUCCESS SCREEN */
     .success-box {
       text-align: center;
       padding: 40px 20px;
     }
 
     .success-icon {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       background: rgba(34, 197, 94, 0.15);
       border: 2px solid var(--success);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 50px;
-      margin: 0 auto 24px auto;
+      font-size: 45px;
+      margin: 0 auto 20px auto;
       box-shadow: 0 0 40px rgba(34, 197, 94, 0.3);
     }
 
-    /* НИЖНЕЕ МЕНЮ НАВИГАЦИИ (ФИКСИРОВАННОЕ) */
+    /* BOTTOM NAV (3 ITEMS) */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -451,7 +491,7 @@
       transform: translateX(-50%);
       width: 100%;
       max-width: 480px;
-      background: rgba(13, 17, 26, 0.9);
+      background: rgba(13, 17, 26, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--border-light);
@@ -467,10 +507,10 @@
       align-items: center;
       gap: 4px;
       color: var(--text-muted);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      width: 25%;
+      width: 33%;
     }
 
     .nav-item.active {
@@ -508,17 +548,23 @@
 
   <div class="app-container">
 
-    <!-- 1. ЭКРАН ЗАПУСКА (SPLASH)[cite: 1] -->
+    <!-- 1. SPLASH SCREEN С ВВОДОМ ИМЕНИ -->
     <main id="screen-splash" class="screen active">
       <div class="splash-container">
         <div class="splash-logo">🎮</div>
         <h1 class="splash-title">SNG GAME BAR</h1>
-        <p class="splash-subtitle">Поддержи любимые игры и получи мгновенное пополнение!</p>
-        <button class="btn-primary" onclick="navTo('screen-main')">Начать ➔</button>
+        <p class="splash-subtitle">Поддержи любимые игры и получи мгновенный донат!</p>
+        
+        <div class="splash-input-box">
+          <label class="input-label" style="text-align: center;">КАК К ВАМ ОБРАЩАТЬСЯ?</label>
+          <input type="text" id="entry-username" class="input-field" placeholder="Введите ваш никнейм..." style="text-align: center;">
+        </div>
+
+        <button class="btn-primary" onclick="startApp()">Начать ➔</button>
       </div>
     </main>
 
-    <!-- 2. ГЛАВНАЯ СТРАНИЦА (КАТАЛОГИ)[cite: 1] -->
+    <!-- 2. ГЛАВНАЯ СТРАНИЦА (КАТАЛОГ) -->
     <main id="screen-main" class="screen">
       <div class="user-header">
         <div class="user-info">
@@ -528,20 +574,20 @@
             <div id="user-id" class="user-id">ID: 123456</div>
           </div>
         </div>
-        <div class="balance-badge">💎 0 смн.</div>
+        <div class="balance-badge">💎 SNG BAR</div>
       </div>
 
       <div class="search-box">
-        <input type="text" class="search-input" placeholder="🔍 Поиск игры..." oninput="filterGames(this.value)">
+        <input type="text" class="search-input input-field" placeholder="🔍 Поиск товара или игры..." oninput="filterGames(this.value)">
       </div>
 
-      <div class="section-title">Выбери игру</div>
+      <div class="section-title">Каталог товаров</div>
       <div id="game-grid" class="game-grid"></div>
     </main>
 
-    <!-- 3. СТРАНИЦА ИГРЫ (ВЫБОР ПАКЕТА)[cite: 1] -->
+    <!-- 3. СТРАНИЦА ИГРЫ С КАТЕГОРИЯМИ И СЕРВЕРАМИ -->
     <main id="screen-game" class="screen">
-      <div class="nav-back" onclick="navTo('screen-main')">◀ Выбрать другую игру</div>
+      <div class="nav-back" onclick="navTo('screen-main')">◀ Назад в каталог</div>
       
       <div class="banner-card">
         <img id="game-banner" src="" class="banner-img" alt="">
@@ -551,15 +597,20 @@
         </div>
       </div>
 
-      <div class="section-title">Выберите товар</div>
-      <div id="pack-list" class="pack-list"></div>
+      <!-- Селектор серверов/регионов (если есть) -->
+      <div id="server-selector-box" class="selector-box" style="display:none;">
+        <label class="input-label" id="server-label">ВЫБЕРИТЕ СЕРВЕР / РЕГИОН:</label>
+        <div id="server-options" class="selector-options"></div>
+      </div>
 
-      <button class="btn-primary" onclick="navTo('screen-payment')">Выбрать способ оплаты ➔</button>
+      <div id="categories-container"></div>
+
+      <button class="btn-primary" style="margin-top:20px;" onclick="goToPayment()">Перейти к оплате ➔</button>
     </main>
 
-    <!-- 4. СТРАНИЦА ОПЛАТЫ И РЕКВИЗИТОВ[cite: 1] -->
+    <!-- 4. СТРАНИЦА ОПЛАТЫ -->
     <main id="screen-payment" class="screen">
-      <div class="nav-back" onclick="navTo('screen-game')">◀ Назад к товарам</div>
+      <div class="nav-back" onclick="navTo('screen-game')">◀ Назад к выбору товара</div>
       <div class="section-title">Способ оплаты</div>
 
       <div class="pay-option selected" id="pay-alif" onclick="selectPay('Алиф Моби', '+992931088151')">
@@ -593,33 +644,33 @@
       </div>
 
       <div class="input-group">
-        <label class="input-label">ВАШ PLAYER ID / ТЕГ АККАУНТА:</label>
-        <input type="text" id="player-id" class="input-field" placeholder="Например: 512345678">
+        <label class="input-label">ВАШ PLAYER ID / ТЕГ / ЛОГИН:</label>
+        <input type="text" id="player-id" class="input-field" placeholder="Введите ID или логин аккаунта">
       </div>
 
       <div class="input-group">
-        <label class="input-label">ПРИКРЕПИТЕ ЧЕК ОПЛАТЫ:</label>
+        <label class="input-label">ПРИКРЕПИТЕ СКРИНШОТ ЧЕКА:</label>
         <input type="file" id="receipt-file" class="input-field" accept="image/*">
       </div>
 
       <div id="status-msg" class="status-msg"></div>
 
-      <button id="btn-submit" class="btn-primary" onclick="submitOrder()">Подтвердить оплату ➔</button>
+      <button id="btn-submit" class="btn-primary" onclick="submitOrder()">Подтвердить и отправить ➔</button>
     </main>
 
-    <!-- 5. ЭКРАН УСПЕШНОЙ ОПЛАТЫ[cite: 1] -->
+    <!-- 5. ЭКРАН УСПЕХА -->
     <main id="screen-success" class="screen">
       <div class="success-box">
         <div class="success-icon">✓</div>
-        <h2 style="font-size:22px; font-weight:900; margin-bottom:8px;">Донат успешно отправлен!</h2>
-        <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px;" id="success-details"></p>
-        <button class="btn-primary" onclick="navTo('screen-main')">Вернуться в меню</button>
+        <h2 style="font-size:22px; font-weight:900; margin-bottom:8px;">Заказ отправлен!</h2>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:24px;" id="success-details"></p>
+        <button class="btn-primary" onclick="navTo('screen-main')">Вернуться на главную</button>
       </div>
     </main>
 
-    <!-- 6. ПРОФИЛЬ / ИСТОРИЯ ДОНАТОВ[cite: 1] -->
+    <!-- 6. МОИ ДОНАТЫ И ПРОФИЛЬ -->
     <main id="screen-profile" class="screen">
-      <div class="section-title">Профиль и история</div>
+      <div class="section-title">Профиль пользователя</div>
       <div class="pay-option" style="margin-bottom: 20px;">
         <div style="display:flex; align-items:center; gap:12px;">
           <div class="user-avatar" id="profile-avatar">U</div>
@@ -630,139 +681,252 @@
         </div>
       </div>
 
-      <div class="section-title">История заказов</div>
+      <div class="section-title">История донатов</div>
       <div id="history-list">
-        <div style="text-align:center; color:var(--text-muted); font-size:13px; padding:20px;">История пока пуста</div>
+        <div style="text-align:center; color:var(--text-muted); font-size:13px; padding:30px;">У вас пока нет активных заказов</div>
       </div>
     </main>
 
   </div>
 
-  <!-- НИЖНЕЕ МЕНЮ (НАВИГАЦИЯ)[cite: 1] -->
+  <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (3 ВКЛАДКИ) -->
   <nav id="bottom-nav" class="bottom-nav" style="display:none;">
-    <div class="nav-item active" onclick="navTo('screen-main', this)">
+    <div class="nav-item active" id="nav-main" onclick="navTo('screen-main', this)">
       <span class="nav-icon">🏠</span>
       <span>Главная</span>
     </div>
-    <div class="nav-item" onclick="navTo('screen-main', this)">
-      <span class="nav-icon">🎮</span>
-      <span>Игры</span>
-    </div>
-    <div class="nav-item" onclick="navTo('screen-profile', this)">
+    <div class="nav-item" id="nav-donates" onclick="navTo('screen-profile', this)">
       <span class="nav-icon">🛡️</span>
       <span>Мои донаты</span>
     </div>
-    <div class="nav-item" onclick="navTo('screen-profile', this)">
+    <div class="nav-item" id="nav-profile" onclick="navTo('screen-profile', this)">
       <span class="nav-icon">👤</span>
       <span>Профиль</span>
     </div>
   </nav>
 
   <script>
-    // ⚠️️ ВАШИ НАСТРОЙКИ BOTA
     const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8";
     const ADMIN_IDS = ["7934934196",
-                      "6940892940"]; // Укажите ваш реальный Telegram ID
+                      "6940892940"]; // Вкажите ваш настоящий Telegram ID
 
-    // Данные каталога игр
+    // ПОЛНЫЙ ВАШ КАТАЛОГ
     const catalog = [
+      {
+        id: "pubg",
+        name: "PUBG Mobile",
+        desc: "Пополнение UC по ID",
+        badge: "HOT",
+        banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Пакеты UC",
+            items: [
+              { name: "60 UC", price: "15 смн." },
+              { name: "300 + 25 UC", bonus: "БОНУС", price: "50 смн." },
+              { name: "600 + 60 UC", bonus: "ХИТ", price: "100 смн." },
+              { name: "1500 + 300 UC", price: "250 смн." },
+              { name: "3000 + 850 UC", price: "460 смн." },
+              { name: "6000 + 2100 UC", price: "880 смн." }
+            ]
+          },
+          {
+            title: "Подписки",
+            items: [
+              { name: "Royale Pass", price: "60 смн." },
+              { name: "Elite Pass Plus", price: "290 смн." },
+              { name: "Prime (1 мес)", price: "15 смн." },
+              { name: "Prime Plus (1 мес)", price: "100 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "freefire",
+        name: "Free Fire",
+        desc: "Алмазы и ваучеры",
+        badge: "POPULAR",
+        banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Алмазы",
+            items: [
+              { name: "100 + 10 Алмазов", price: "10.0 смн." },
+              { name: "310 + 31 Алмаз", price: "30.0 смн." },
+              { name: "520 + 52 Алмаза", price: "50.0 смн." },
+              { name: "1060 + 106 Алмазов", price: "95.0 смн." },
+              { name: "2180 + 218 Алмазов", price: "195.0 смн." }
+            ]
+          },
+          {
+            title: "Ваучеры",
+            items: [
+              { name: "Недельный ваучер", price: "18.50 смн." },
+              { name: "Месячный ваучер", price: "80.0 смн." }
+            ]
+          },
+          {
+            title: "Пропуск прокачки",
+            items: [
+              { name: "6 уровень", price: "5 смн." },
+              { name: "10 уровень", price: "7.80 смн." },
+              { name: "15 уровень", price: "7.80 смн." },
+              { name: "20 уровень", price: "8.0 смн." },
+              { name: "25 уровень", price: "8.0 смн." },
+              { name: "30 уровень", price: "10.50 смн." }
+            ]
+          }
+        ]
+      },
       {
         id: "mlbb",
         name: "Mobile Legends",
         desc: "Алмазы по ID",
-        icon: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=200&q=80",
+        badge: "TOP",
         banner: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
-        packs: [
-          { name: "56 Алмазов", price: "10 смн." },
-          { name: "112 Алмазов", price: "20 смн." },
-          { name: "257 Алмазов", price: "50 смн.", badge: "Популярно" },
-          { name: "514 Алмазов", price: "100 смн." },
-          { name: "1028 Алмазов", price: "200 смн." }
+        categories: [
+          {
+            title: "Алмазы MLBB",
+            items: [
+              { name: "86 Алмазов", price: "16.0 смн." },
+              { name: "172 Алмаза", price: "30.0 смн." },
+              { name: "257 Алмазов", price: "53.0 смн." },
+              { name: "706 Алмазов", price: "125.0 смн." },
+              { name: "2195 Алмазов", price: "320.0 смн." }
+            ]
+          },
+          {
+            title: "Пропуска",
+            items: [
+              { name: "Недельный пропуск", price: "20.0 смн." },
+              { name: "Twilight Pass", price: "88.0 смн." }
+            ]
+          }
         ]
       },
       {
-        id: "pubg",
-        name: "PUBG Mobile",
-        desc: "Пополнение UC",
-        icon: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=200&q=80",
-        banner: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
-        packs: [
-          { name: "60 UC", price: "15 смн." },
-          { name: "325 UC", price: "50 смн.", badge: "Хит" },
-          { name: "660 UC", price: "100 смн." },
-          { name: "1800 UC", price: "250 смн." }
+        id: "tg_services",
+        name: "Telegram Премиум & Stars",
+        desc: "Подписки и Звезды",
+        badge: "NEW",
+        banner: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Telegram Premium",
+            items: [
+              { name: "Premium (3 месяца)", price: "115.00 смн." },
+              { name: "Premium (6 месяцев)", price: "175.00 смн." },
+              { name: "Premium (12 месяцев)", price: "290.00 смн." }
+            ]
+          },
+          {
+            title: "Telegram Stars",
+            items: [
+              { name: "50 Звезд", price: "14.00 смн." },
+              { name: "100 Звезд", price: "27.50 смн." },
+              { name: "250 Звезд", price: "68.00 смн." },
+              { name: "500 Звезд", price: "135.00 смн." }
+            ]
+          }
         ]
       },
       {
         id: "genshin",
         name: "Genshin Impact",
         desc: "Кристаллы и Луна",
-        icon: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=200&q=80",
         banner: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80",
-        packs: [
-          { name: "Благословение луны", price: "58 смн.", badge: "Выгодно" },
-          { name: "300 Кристаллов", price: "58 смн." },
-          { name: "980 Кристаллов", price: "170 смн." }
-        ]
-      },
-      {
-        id: "freefire",
-        name: "Free Fire",
-        desc: "Алмазы по ID",
-        icon: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=200&q=80",
-        banner: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
-        packs: [
-          { name: "100 Алмазов", price: "10 смн." },
-          { name: "310 Алмазов", price: "30 смн." },
-          { name: "520 Алмазов", price: "50 смн." }
-        ]
-      },
-      {
-        id: "roblox",
-        name: "Roblox",
-        desc: "Robux",
-        icon: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=200&q=80",
-        banner: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80",
-        packs: [
-          { name: "100 Robux", price: "20 смн." },
-          { name: "400 Robux", price: "60 смн." },
-          { name: "800 Robux", price: "99 смн." }
+        servers: ["Европа", "Азия", "Америка", "TW/HK/MO"],
+        categories: [
+          {
+            title: "Кристаллы Сотворения",
+            items: [
+              { name: "Благословение луны", price: "58.0 смн." },
+              { name: "60 Кристаллов", price: "15.0 смн." },
+              { name: "300+30 Кристаллов", price: "58.0 смн." },
+              { name: "980+110 Кристаллов", price: "170.0 смн." },
+              { name: "1980+260 Кристаллов", price: "330.0 смн." }
+            ]
+          }
         ]
       },
       {
         id: "codm",
         name: "CoD Mobile",
         desc: "CP Пополнение",
-        icon: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=200&q=80",
+        badge: "SALE",
         banner: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80",
-        packs: [
-          { name: "80 CP", price: "15 смн." },
-          { name: "420 CP", price: "48 смн." }
+        regions: ["Казахстан / СНГ", "США", "Индия", "Европа"],
+        categories: [
+          {
+            title: "Пакеты CP",
+            items: [
+              { name: "80 CP", price: "15.0 смн." },
+              { name: "420 CP", price: "48.0 смн." },
+              { name: "880 CP", price: "90.0 смн." },
+              { name: "2400 CP", price: "225.0 смн." }
+            ]
+          }
+        ]
+      },
+      {
+        id: "roblox",
+        name: "Roblox",
+        desc: "Robux кодами",
+        banner: "https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?auto=format&fit=crop&w=600&q=80",
+        categories: [
+          {
+            title: "Пакеты Robux",
+            items: [
+              { name: "100 Robux", price: "20.0 смн." },
+              { name: "400 Robux", price: "60.0 смн." },
+              { name: "800 Robux", price: "99.0 смн." },
+              { name: "2000 Robux", price: "230.0 смн." }
+            ]
+          }
         ]
       }
     ];
 
     let state = {
+      userName: "Пользователь",
       game: null,
+      serverOrRegion: "",
       pack: null,
       payMethod: "Алиф Моби",
       payNum: "+992931088151"
     };
 
-    // Инициализация WebApp
     const tg = window.Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
-      const user = tg.initDataUnsafe?.user;
-      if (user) {
-        document.getElementById("user-name").innerText = user.first_name;
-        document.getElementById("user-id").innerText = "ID: " + user.id;
-        document.getElementById("user-avatar").innerText = user.first_name[0];
-        document.getElementById("profile-name").innerText = user.first_name;
-        document.getElementById("profile-id").innerText = "ID: " + user.id;
-        document.getElementById("profile-avatar").innerText = user.first_name[0];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (tg) {
+        tg.ready();
+        tg.expand();
+        const tgUser = tg.initDataUnsafe?.user;
+        if (tgUser) {
+          const defaultName = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
+          document.getElementById("entry-username").value = defaultName;
+          document.getElementById("user-id").innerText = "ID: " + tgUser.id;
+          document.getElementById("profile-id").innerText = "ID: " + tgUser.id;
+        }
       }
+      renderCatalog(catalog);
+    });
+
+    function startApp() {
+      const inputName = document.getElementById("entry-username").value.trim();
+      if (!inputName) {
+        alert("Пожалуйста, введите ваше имя или никнейм!");
+        return;
+      }
+
+      state.userName = inputName;
+      document.getElementById("user-name").innerText = state.userName;
+      document.getElementById("profile-name").innerText = state.userName;
+      document.getElementById("user-avatar").innerText = state.userName[0].toUpperCase();
+      document.getElementById("profile-avatar").innerText = state.userName[0].toUpperCase();
+
+      navTo('screen-main');
     }
 
     function navTo(screenId, el) {
@@ -789,41 +953,80 @@
       items.forEach(g => {
         grid.innerHTML += `
           <div class="game-item" onclick="openGame('${g.id}')">
-            <img src="${g.icon}" class="game-icon" alt="">
-            <div class="game-title">${g.name}</div>
+            ${g.badge ? `<div class="game-badge">${g.badge}</div>` : ''}
+            <img src="${g.banner}" class="game-item-img" alt="">
+            <div class="game-item-title">${g.name}</div>
+            <div class="game-item-desc">${g.desc}</div>
           </div>
         `;
       });
     }
 
     function filterGames(val) {
-      const filtered = catalog.filter(c => c.name.toLowerCase().includes(val.toLowerCase()));
+      const filtered = catalog.filter(c => c.name.toLowerCase().includes(val.toLowerCase()) || c.desc.toLowerCase().includes(val.toLowerCase()));
       renderCatalog(filtered);
     }
 
     function openGame(id) {
       state.game = catalog.find(g => g.id === id);
+      state.pack = null;
+      state.serverOrRegion = "";
+
       document.getElementById("game-title").innerText = state.game.name;
       document.getElementById("game-desc").innerText = state.game.desc;
       document.getElementById("game-banner").src = state.game.banner;
 
-      const packContainer = document.getElementById("pack-list");
-      packContainer.innerHTML = "";
+      // Настройка серверов / регионов
+      const serverBox = document.getElementById("server-selector-box");
+      const serverOptions = document.getElementById("server-options");
+      const serverLabel = document.getElementById("server-label");
+      const list = state.game.servers || state.game.regions;
 
-      state.game.packs.forEach((p, idx) => {
-        const isSelected = idx === 0;
-        if (isSelected) state.pack = p;
+      if (list && list.length > 0) {
+        serverBox.style.display = "block";
+        serverLabel.innerText = state.game.servers ? "ВЫБЕРИТЕ СЕРВЕР:" : "ВЫБЕРИТЕ РЕГИОН:";
+        serverOptions.innerHTML = "";
+        state.serverOrRegion = list[0];
 
-        packContainer.innerHTML += `
-          <div class="pack-card ${isSelected ? 'selected' : ''}" onclick="selectPack(this, ${idx})">
-            <div class="pack-info">
-              <span class="pack-icon">💎</span>
+        list.forEach((s, idx) => {
+          serverOptions.innerHTML += `
+            <button class="chip-btn ${idx === 0 ? 'selected' : ''}" onclick="selectServer(this, '${s}')">${s}</button>
+          `;
+        });
+      } else {
+        serverBox.style.display = "none";
+      }
+
+      // Настройка категорий и товаров
+      const catContainer = document.getElementById("categories-container");
+      catContainer.innerHTML = "";
+
+      let firstPackSet = false;
+
+      state.game.categories.forEach((cat, cIdx) => {
+        let packsHtml = "";
+        cat.items.forEach((p, pIdx) => {
+          const isSelected = !firstPackSet;
+          if (isSelected) {
+            state.pack = p;
+            firstPackSet = true;
+          }
+
+          packsHtml += `
+            <div class="pack-card ${isSelected ? 'selected' : ''}" onclick="selectPack(this, ${cIdx}, ${pIdx})">
               <div>
                 <span class="pack-name">${p.name}</span>
-                ${p.badge ? `<span class="pack-badge">${p.badge}</span>` : ''}
+                ${p.bonus ? `<span class="pack-bonus">${p.bonus}</span>` : ''}
               </div>
+              <div class="pack-price">${p.price}</div>
             </div>
-            <div class="pack-price">${p.price}</div>
+          `;
+        });
+
+        catContainer.innerHTML += `
+          <div class="category-group">
+            <div class="category-title">${cat.title}</div>
+            <div class="pack-list">${packsHtml}</div>
           </div>
         `;
       });
@@ -831,10 +1034,24 @@
       navTo('screen-game');
     }
 
-    function selectPack(el, index) {
+    function selectServer(el, val) {
+      document.querySelectorAll('#server-options .chip-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      state.serverOrRegion = val;
+    }
+
+    function selectPack(el, catIdx, packIdx) {
       document.querySelectorAll('.pack-card').forEach(c => c.classList.remove('selected'));
       el.classList.add('selected');
-      state.pack = state.game.packs[index];
+      state.pack = state.game.categories[catIdx].items[packIdx];
+    }
+
+    function goToPayment() {
+      if (!state.pack) {
+        alert("Выберите товар!");
+        return;
+      }
+      navTo('screen-payment');
     }
 
     function selectPay(method, num) {
@@ -857,7 +1074,7 @@
       const statusMsg = document.getElementById("status-msg");
 
       if (!playerId) {
-        statusMsg.innerText = "⚠️ Укажите ваш ID аккаунта!";
+        statusMsg.innerText = "⚠️ Укажите ваш ID / Логин аккаунта!";
         statusMsg.className = "status-msg error";
         statusMsg.style.display = "block";
         return;
@@ -874,15 +1091,17 @@
       btn.innerText = "Отправка...";
 
       const tgUser = tg?.initDataUnsafe?.user;
-      const username = tgUser?.username ? `@${tgUser.username}` : (tgUser?.first_name || "Неизвестный");
+      const tgUsername = tgUser?.username ? `@${tgUser.username}` : "не указан";
 
       const caption = `🛒 <b>НОВЫЙ ЗАКАЗ В SNG GAME BAR!</b>\n\n` +
-        `👤 <b>Покупатель:</b> ${username}\n` +
+        `👤 <b>Имя клиента:</b> ${state.userName}\n` +
+        `✈️ <b>Telegram:</b> ${tgUsername}\n` +
         `🎮 <b>Игра:</b> ${state.game.name}\n` +
+        (state.serverOrRegion ? `🌐 <b>Сервер/Регион:</b> ${state.serverOrRegion}\n` : '') +
         `💎 <b>Товар:</b> ${state.pack.name}\n` +
         `💵 <b>Сумма:</b> ${state.pack.price}\n` +
-        `🆔 <b>ID Игрока:</b> <code>${playerId}</code>\n` +
-        `💳 <b>Оплата:</b> ${state.payMethod}`;
+        `🆔 <b>ID / Логин:</b> <code>${playerId}</code>\n` +
+        `💳 <b>Способ оплаты:</b> ${state.payMethod}`;
 
       let sent = false;
       for (const adminId of ADMIN_IDS) {
@@ -905,18 +1124,16 @@
       }
 
       if (sent) {
-        document.getElementById("success-details").innerText = `${state.pack.name} — ${state.game.name}`;
+        document.getElementById("success-details").innerText = `${state.game.name} — ${state.pack.name} (${state.pack.price})`;
         navTo("screen-success");
       } else {
-        statusMsg.innerText = "❌ Ошибка при отправке. Убедитесь, что запустили бота через /start!";
+        statusMsg.innerText = "❌ Ошибка отправки! Проверьте, что бот запущен через /start и ADMIN_IDS указан верно.";
         statusMsg.className = "status-msg error";
         statusMsg.style.display = "block";
         btn.disabled = false;
-        btn.innerText = "Подтвердить оплату ➔";
+        btn.innerText = "Подтвердить и отправить ➔";
       }
     }
-
-    document.addEventListener("DOMContentLoaded", () => renderCatalog(catalog));
   </script>
 </body>
 </html>

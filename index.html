@@ -483,7 +483,7 @@
       box-shadow: 0 0 40px rgba(34, 197, 94, 0.3);
     }
 
-    /* BOTTOM NAV (2 ВКЛАДКИ) */
+    /* BOTTOM NAV */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -560,7 +560,7 @@
           <input type="text" id="entry-username" class="input-field" placeholder="Введите ваш никнейм..." style="text-align: center;">
         </div>
 
-        <button class="btn-primary" onclick="startApp()">Начать ➔</button>
+        <button type="button" class="btn-primary" onclick="startApp()">Начать ➔</button>
       </div>
     </main>
 
@@ -605,7 +605,7 @@
 
       <div id="categories-container"></div>
 
-      <button class="btn-primary" style="margin-top:20px;" onclick="goToPayment()">Перейти к оплате ➔</button>
+      <button type="button" class="btn-primary" style="margin-top:20px;" onclick="goToPayment()">Перейти к оплате ➔</button>
     </main>
 
     <!-- 4. СТРАНИЦА ОПЛАТЫ -->
@@ -655,7 +655,7 @@
 
       <div id="status-msg" class="status-msg"></div>
 
-      <button id="btn-submit" class="btn-primary" onclick="submitOrder()">Подтвердить и отправить ➔</button>
+      <button type="button" id="btn-submit" class="btn-primary" onclick="submitOrder()">Подтвердить и отправить ➔</button>
     </main>
 
     <!-- 5. ЭКРАН УСПЕХА -->
@@ -664,7 +664,7 @@
         <div class="success-icon">✓</div>
         <h2 style="font-size:22px; font-weight:900; margin-bottom:8px;">Заказ отправлен!</h2>
         <p style="font-size:13px; color:var(--text-muted); margin-bottom:24px;" id="success-details"></p>
-        <button class="btn-primary" onclick="navTo('screen-main')">Вернуться на главную</button>
+        <button type="button" class="btn-primary" onclick="navTo('screen-main')">Вернуться на главную</button>
       </div>
     </main>
 
@@ -678,7 +678,7 @@
 
   </div>
 
-  <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (2 ВКЛАДКИ) -->
+  <!-- НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ -->
   <nav id="bottom-nav" class="bottom-nav" style="display:none;">
     <div class="nav-item active" id="nav-main" onclick="navTo('screen-main', this)">
       <span class="nav-icon">🏠</span>
@@ -692,10 +692,9 @@
 
   <script>
     const BOT_TOKEN = "8920396236:AAH74veXNZTanEyw-P-BfEbbwUXI_9z-1W8";
-    const ADMIN_IDS = ["7934934196"
-                      "6940892940"]; // Укажите ваш настоящий Telegram ID
+    const ADMIN_IDS = ["7934934196",
+                      6940892940];
 
-    // КАТАЛОГ ТОВАРОВ
     const catalog = [
       {
         id: "pubg",
@@ -889,31 +888,40 @@
         tg.expand();
         const tgUser = tg.initDataUnsafe?.user;
         if (tgUser) {
-          const defaultName = tgUser.first_name + (tgUser.last_name ? " " + tgUser.last_name : "");
-          document.getElementById("entry-username").value = defaultName;
-          document.getElementById("user-id").innerText = "ID: " + tgUser.id;
+          const defaultName = (tgUser.first_name || '') + (tgUser.last_name ? " " + tgUser.last_name : '');
+          if (defaultName.trim()) {
+            document.getElementById("entry-username").value = defaultName.trim();
+          }
+          if (tgUser.id) {
+            document.getElementById("user-id").innerText = "ID: " + tgUser.id;
+          }
         }
       }
       renderCatalog(catalog);
     });
 
     function startApp() {
-      const inputName = document.getElementById("entry-username").value.trim();
-      if (!inputName) {
-        alert("Пожалуйста, введите ваше имя или никнейм!");
-        return;
+      const inputEl = document.getElementById("entry-username");
+      let val = inputEl ? inputEl.value.trim() : "";
+      
+      if (!val) {
+        val = "Пользователь";
       }
 
-      state.userName = inputName;
+      state.userName = val;
       document.getElementById("user-name").innerText = state.userName;
-      document.getElementById("user-avatar").innerText = state.userName[0].toUpperCase();
+      document.getElementById("user-avatar").innerText = state.userName.charAt(0).toUpperCase() || "U";
 
-      navTo('screen-main');
+      const mainNav = document.getElementById("nav-main");
+      navTo('screen-main', mainNav);
     }
 
     function navTo(screenId, el) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
+      const targetScreen = document.getElementById(screenId);
+      if (targetScreen) {
+        targetScreen.classList.add('active');
+      }
 
       const bottomNav = document.getElementById('bottom-nav');
       if (screenId === 'screen-splash') {
@@ -971,7 +979,7 @@
 
         list.forEach((s, idx) => {
           serverOptions.innerHTML += `
-            <button class="chip-btn ${idx === 0 ? 'selected' : ''}" onclick="selectServer(this, '${s}')">${s}</button>
+            <button type="button" class="chip-btn ${idx === 0 ? 'selected' : ''}" onclick="selectServer(this, '${s}')">${s}</button>
           `;
         });
       } else {
@@ -1028,7 +1036,7 @@
 
     function goToPayment() {
       if (!state.pack) {
-        alert("Выберите товар!");
+        showStatus("⚠️ Выберите товар!", "error");
         return;
       }
       navTo('screen-payment');
@@ -1045,24 +1053,27 @@
 
     function copyReq() {
       navigator.clipboard.writeText(state.payNum);
-      alert("Реквизиты скопированы!");
+      showStatus("✅ Реквизиты скопированы!", "success");
+    }
+
+    function showStatus(msg, type) {
+      const statusMsg = document.getElementById("status-msg");
+      if (!statusMsg) return;
+      statusMsg.innerText = msg;
+      statusMsg.className = "status-msg " + type;
+      statusMsg.style.display = "block";
     }
 
     async function submitOrder() {
       const playerId = document.getElementById("player-id").value.trim();
       const fileInput = document.getElementById("receipt-file");
-      const statusMsg = document.getElementById("status-msg");
 
       if (!playerId) {
-        statusMsg.innerText = "⚠️ Укажите ваш ID / Логин аккаунта!";
-        statusMsg.className = "status-msg error";
-        statusMsg.style.display = "block";
+        showStatus("⚠️ Укажите ваш ID / Логин аккаунта!", "error");
         return;
       }
       if (!fileInput.files || !fileInput.files[0]) {
-        statusMsg.innerText = "⚠️ Прикрепите скриншот чека!";
-        statusMsg.className = "status-msg error";
-        statusMsg.style.display = "block";
+        showStatus("⚠️ Прикрепите скриншот чека!", "error");
         return;
       }
 
@@ -1107,9 +1118,7 @@
         document.getElementById("success-details").innerText = `${state.game.name} — ${state.pack.name} (${state.pack.price})`;
         navTo("screen-success");
       } else {
-        statusMsg.innerText = "❌ Ошибка отправки! Проверьте, что бот запущен через /start и ADMIN_IDS указан верно.";
-        statusMsg.className = "status-msg error";
-        statusMsg.style.display = "block";
+        showStatus("❌ Ошибка отправки! Проверьте, что бот запущен через /start и ADMIN_IDS указан верно.", "error");
         btn.disabled = false;
         btn.innerText = "Подтвердить и отправить ➔";
       }
